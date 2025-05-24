@@ -1,0 +1,60 @@
+Feature: Login with Apple ID
+
+  Scenario: Successful Login with Valid Apple ID Credentials
+    Given User is on the login page
+    When User clicks the "Login with Apple ID" button
+    And User enters valid Apple ID and password in the Apple sign-in window
+    And User approves the sign-in request if prompted
+    Then User should be logged in successfully
+    And User should be redirected to the home page
+
+  Scenario: Unsuccessful Login with Invalid Apple ID Credentials
+    Given User is on the login page
+    When User clicks the "Login with Apple ID" button
+    And User enters invalid Apple ID or password in the Apple sign-in window
+    Then User should see an error message indicating incorrect credentials
+    And User should remain on the login page or Apple sign-in window
+
+  Scenario: Login with Apple ID - User Cancels Sign-in
+    Given User is on the login page
+    When User clicks the "Login with Apple ID" button
+    And User cancels the Apple sign-in process
+    Then User should be returned to the login page
+    And User should see a message indicating sign-in was cancelled
+
+  Scenario: Login with Apple ID - Two-Factor Authentication Required and Successful
+    Given User is on the login page
+    When User clicks the "Login with Apple ID" button
+    And User enters valid Apple ID and password in the Apple sign-in window
+    And Two-factor authentication is required
+    And User enters the correct two-factor authentication code
+    Then User should be logged in successfully
+    And User should be redirected to the home page
+
+  Scenario: Login with Apple ID - Two-Factor Authentication Required and Unsuccessful
+    Given User is on the login page
+    When User clicks the "Login with Apple ID" button
+    And User enters valid Apple ID and password in the Apple sign-in window
+    And Two-factor authentication is required
+    And User enters the incorrect two-factor authentication code
+    Then User should see an error message indicating incorrect two-factor authentication code
+    And User should remain on the Apple sign-in window
+
+  Scenario: Login with Apple ID - Apple ID Account Locked
+    Given User is on the login page
+    When User clicks the "Login with Apple ID" button
+    And User enters Apple ID credentials associated with a locked Apple account
+    Then User should see an error message indicating the Apple account is locked
+    And User should be prompted to reset the Apple ID password
+
+  Scenario: Login with Apple ID - Network Error During Authentication
+    Given User is on the login page
+    When User clicks the "Login with Apple ID" button
+    And A network error occurs during Apple ID authentication
+    Then User should see an error message indicating a network problem
+    And User should be prompted to try again later
+
+  Scenario: Verify "Login with Apple ID" Button is Present
+    Given User is on the login page
+    Then The "Login with Apple ID" button should be visible
+    And The "Login with Apple ID" button should be enabled
