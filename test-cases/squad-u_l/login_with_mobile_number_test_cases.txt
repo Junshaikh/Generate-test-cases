@@ -1,0 +1,126 @@
+```gherkin
+Feature: Login with Mobile Number
+
+  Background:
+    Given the user is on the Login page
+
+  Scenario: Successful Login with Valid Mobile Number and Password
+    Given the user enters a valid mobile number "1234567890"
+    And the user enters a valid password "Password123"
+    When the user clicks the "Login" button
+    Then the user should be redirected to the "Home" page
+    And the user should see a success message "Login successful!"
+    And the user should be logged in
+
+  Scenario: Login with Invalid Mobile Number Format
+    Given the user enters an invalid mobile number "12345"
+    And the user enters a valid password "Password123"
+    When the user clicks the "Login" button
+    Then the user should see an error message "Invalid mobile number format"
+    And the user should remain on the Login page
+    And the user should not be logged in
+
+  Scenario: Login with Non-Existent Mobile Number
+    Given the user enters a non-existent mobile number "9999999999"
+    And the user enters a valid password "Password123"
+    When the user clicks the "Login" button
+    Then the user should see an error message "Mobile number not registered"
+    And the user should remain on the Login page
+    And the user should not be logged in
+
+  Scenario: Login with Incorrect Password
+    Given the user enters a valid mobile number "1234567890"
+    And the user enters an incorrect password "WrongPassword"
+    When the user clicks the "Login" button
+    Then the user should see an error message "Incorrect password"
+    And the user should remain on the Login page
+    And the user should not be logged in
+
+  Scenario: Login with Empty Mobile Number
+    Given the user does not enter a mobile number
+    And the user enters a valid password "Password123"
+    When the user clicks the "Login" button
+    Then the user should see an error message "Please enter your mobile number"
+    And the user should remain on the Login page
+    And the user should not be logged in
+
+  Scenario: Login with Empty Password
+    Given the user enters a valid mobile number "1234567890"
+    And the user does not enter a password
+    When the user clicks the "Login" button
+    Then the user should see an error message "Please enter your password"
+    And the user should remain on the Login page
+    And the user should not be logged in
+
+  Scenario: Login with Mobile Number Containing Characters other than Digits
+    Given the user enters an invalid mobile number "123-456-7890"
+    And the user enters a valid password "Password123"
+    When the user clicks the "Login" button
+    Then the user should see an error message "Invalid mobile number format"
+    And the user should remain on the Login page
+    And the user should not be logged in
+
+  Scenario: Remember Me Functionality
+    Given the user enters a valid mobile number "1234567890"
+    And the user enters a valid password "Password123"
+    And the user checks the "Remember Me" checkbox
+    When the user clicks the "Login" button
+    Then the user should be redirected to the "Home" page
+    And the user should be logged in
+    And the mobile number should be pre-filled on the Login page on next visit
+
+  Scenario: Login with leading/trailing spaces in Mobile Number
+    Given the user enters a mobile number with leading and trailing spaces "  1234567890  "
+    And the user enters a valid password "Password123"
+    When the user clicks the "Login" button
+    Then the user should be redirected to the "Home" page
+    And the user should see a success message "Login successful!"
+    And the user should be logged in
+```
+
+**Explanation:**
+
+*   **Feature:** Describes the overall feature being tested - "Login with Mobile Number".
+*   **Background:** Sets up the initial state for all scenarios.  Here, it ensures the user starts on the Login page.
+*   **Scenario:** Represents a specific test case.
+*   **Given:** Specifies the initial context or preconditions.
+*   **When:** Describes the action the user takes.
+*   **Then:** States the expected outcome or result.
+*   **And:** Used to chain together multiple Given, When, or Then steps for better readability.
+
+**Key Considerations and Improvements:**
+
+*   **Data-Driven Testing:**  For scenarios that are similar but use different input data (like invalid mobile numbers), consider using Scenario Outlines (Tables) to avoid repeating the same steps multiple times.
+*   **Error Message Verification:**  The test cases verify the *presence* of error messages. You could extend them to verify the *exact content* of the error message if that's important.
+*   **Password Complexity:** Consider adding scenarios to test password complexity requirements (e.g., minimum length, special characters).
+*   **Security Testing:**  The example lacks security-related tests. Consider adding scenarios to test for:
+    *   **Brute-force protection:** What happens after multiple failed login attempts?
+    *   **SQL injection:** Can malicious SQL code be entered into the mobile number or password fields?
+    *   **Cross-site scripting (XSS):** Can malicious JavaScript code be injected into the login fields?
+*   **Localization:** If the application supports multiple languages, add scenarios to test the login functionality in different languages.  This would involve verifying the error messages are displayed correctly.
+*   **Accessibility:** While these tests are focused on functionality, remember to consider accessibility when designing the UI for the login page (e.g., screen reader compatibility).  You could have separate accessibility tests.
+*   **Two-Factor Authentication (2FA):** If 2FA is enabled after the initial password, you'll need additional scenarios to test that flow.
+*   **Rate Limiting:** Important for security. Add a scenario to verify that there is a rate limit applied to failed login attempts. This prevents brute-force attacks.
+*   **Mobile Number Validation Rules:** Be explicit about what constitutes a valid mobile number (e.g., country code, length, allowed characters).  This will help define comprehensive test cases.
+
+**Example of Scenario Outline for Invalid Mobile Numbers:**
+
+```gherkin
+  Scenario Outline: Login with Various Invalid Mobile Number Formats
+    Given the user enters an invalid mobile number "<mobile_number>"
+    And the user enters a valid password "Password123"
+    When the user clicks the "Login" button
+    Then the user should see an error message "Invalid mobile number format"
+    And the user should remain on the Login page
+    And the user should not be logged in
+
+    Examples:
+      | mobile_number  |
+      | 12345        |
+      | ABCDEFGH     |
+      | 123-456-789  |
+      | 1234567890123|  # Too long
+      |              |  # Empty String (This is similar to the existing scenario but included for completeness)
+```
+
+By incorporating these additions and improvements, you can create a more robust and comprehensive set of test cases for your "Login with Mobile Number" feature. Remember to tailor the tests to the specific requirements and context of your application.
