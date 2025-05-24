@@ -1,0 +1,48 @@
+Feature: Pro User Discounts and Free Delivery
+
+  Scenario: Pro user orders food and receives free delivery
+    Given a Pro user
+    And the user has a delivery address
+    And the user adds food items to the order totaling $25
+    When the user checks out
+    Then the delivery fee is $0
+    And the order total reflects free delivery
+
+  Scenario: Pro user orders food and receives a discount on the food order
+    Given a Pro user
+    And the user adds food items to the order totaling $50
+    When the user checks out
+    Then a discount is applied to the food items
+    And the order total is less than $50
+
+  Scenario: Pro user orders food less than the minimum order value and doesn't get free delivery
+    Given a Pro user
+    And the user has a delivery address
+    And the user adds food items to the order totaling $10
+    When the user checks out
+    Then the delivery fee is not $0
+    And the order total includes a delivery fee
+
+  Scenario: Pro user receives both free delivery and a discount on food order
+    Given a Pro user
+    And the user has a delivery address
+    And the user adds food items to the order totaling $60
+    When the user checks out
+    Then the delivery fee is $0
+    And a discount is applied to the food items
+    And the order total reflects both free delivery and the food discount
+
+  Scenario: Pro user orders only beverages and receives a discount on the beverage order
+    Given a Pro user
+    And the user adds only beverages to the order totaling $30
+    When the user checks out
+    Then a discount is applied to the beverages
+    And the order total is less than $30
+
+  Scenario: Pro user orders only beverages less than the minimum order value and doesn't get free delivery
+    Given a Pro user
+    And the user has a delivery address
+    And the user adds only beverages to the order totaling $5
+    When the user checks out
+    Then the delivery fee is not $0
+    And the order total includes a delivery fee
