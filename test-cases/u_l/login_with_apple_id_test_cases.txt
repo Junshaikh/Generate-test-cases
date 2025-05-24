@@ -1,0 +1,49 @@
+Feature: Login with Apple ID
+
+  Scenario: Successful login with valid Apple ID credentials
+    Given I am on the login page
+    When I click the "Login with Apple" button
+    And I enter my valid Apple ID "valid@example.com"
+    And I enter my valid password "password123"
+    And I click the "Sign In" button
+    Then I should be logged in successfully
+    And I should see the "Welcome" message
+
+  Scenario: Unsuccessful login with invalid Apple ID
+    Given I am on the login page
+    When I click the "Login with Apple" button
+    And I enter my invalid Apple ID "invalid@example.com"
+    And I enter my password "password123"
+    And I click the "Sign In" button
+    Then I should see an "Invalid Apple ID" error message
+
+  Scenario: Unsuccessful login with incorrect password
+    Given I am on the login page
+    When I click the "Login with Apple" button
+    And I enter my Apple ID "valid@example.com"
+    And I enter my incorrect password "wrongpassword"
+    And I click the "Sign In" button
+    Then I should see an "Incorrect password" error message
+
+  Scenario: User cancels Apple ID login
+    Given I am on the login page
+    When I click the "Login with Apple" button
+    And I cancel the Apple ID login process
+    Then I should remain on the login page
+
+  Scenario: User attempts login with empty Apple ID and Password
+    Given I am on the login page
+    When I click the "Login with Apple" button
+    And I leave the Apple ID field empty
+    And I leave the password field empty
+    And I click the "Sign In" button
+    Then I should see "Apple ID is required" error message
+    And I should see "Password is required" error message
+
+  Scenario: User requests password reset via Apple ID login flow
+    Given I am on the login page
+    When I click the "Login with Apple" button
+    And I click the "Forgot Password" link
+    And I enter my Apple ID "valid@example.com"
+    And I click the "Reset Password" button
+    Then I should see a "Password reset email sent" message
