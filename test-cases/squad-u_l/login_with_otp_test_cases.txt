@@ -1,0 +1,106 @@
+```gherkin
+Feature: Login with OTP
+
+  Background:
+    Given The user is on the login page
+
+  Scenario: Successful login with valid phone number and OTP
+    Given The user enters a valid phone number "123-456-7890"
+    And The user clicks the "Send OTP" button
+    Then An OTP is sent to the phone number "123-456-7890"
+    When The user enters the correct OTP "123456"
+    And The user clicks the "Verify OTP" button
+    Then The user is successfully logged in
+    And The user is redirected to the home page
+    And The user sees a welcome message "Welcome, User!"
+
+  Scenario: Login with invalid phone number
+    Given The user enters an invalid phone number "12345"
+    And The user clicks the "Send OTP" button
+    Then An error message is displayed "Invalid phone number format"
+    And The OTP field is not displayed
+
+  Scenario: OTP not received after sending request
+    Given The user enters a valid phone number "123-456-7890"
+    And The user clicks the "Send OTP" button
+    Then An OTP is sent to the phone number "123-456-7890"
+    When The user waits for 60 seconds (OTP expiration time)
+    And The user has not received the OTP
+    Then The user can request a new OTP
+    And A new OTP is sent to the phone number "123-456-7890"
+
+  Scenario: Invalid OTP entered
+    Given The user enters a valid phone number "123-456-7890"
+    And The user clicks the "Send OTP" button
+    Then An OTP is sent to the phone number "123-456-7890"
+    When The user enters an incorrect OTP "654321"
+    And The user clicks the "Verify OTP" button
+    Then An error message is displayed "Invalid OTP"
+    And The user is prompted to re-enter the OTP
+
+  Scenario: OTP expired
+    Given The user enters a valid phone number "123-456-7890"
+    And The user clicks the "Send OTP" button
+    Then An OTP is sent to the phone number "123-456-7890"
+    When The user waits for the OTP to expire (e.g., 2 minutes)
+    And The user enters the OTP after expiration
+    And The user clicks the "Verify OTP" button
+    Then An error message is displayed "OTP has expired. Please request a new one."
+    And The user is prompted to request a new OTP
+
+  Scenario: Multiple incorrect OTP attempts
+    Given The user enters a valid phone number "123-456-7890"
+    And The user clicks the "Send OTP" button
+    Then An OTP is sent to the phone number "123-456-7890"
+    When The user enters an incorrect OTP "654321"
+    And The user clicks the "Verify OTP" button
+    Then An error message is displayed "Invalid OTP"
+    And The user is prompted to re-enter the OTP
+    When The user enters an incorrect OTP "789012"
+    And The user clicks the "Verify OTP" button
+    Then An error message is displayed "Invalid OTP"
+    And The user is prompted to re-enter the OTP
+    When The user enters an incorrect OTP "345678"
+    And The user clicks the "Verify OTP" button
+    Then An error message is displayed "Too many incorrect attempts. Account locked. Please try again later."
+    And The user cannot enter the OTP anymore.
+
+  Scenario: Request new OTP after sending initial OTP
+    Given The user enters a valid phone number "123-456-7890"
+    And The user clicks the "Send OTP" button
+    Then An OTP is sent to the phone number "123-456-7890"
+    When The user clicks the "Resend OTP" button
+    Then A new OTP is sent to the phone number "123-456-7890"
+    And The previous OTP is invalidated
+    When The user enters the previous OTP
+    And The user clicks the "Verify OTP" button
+    Then An error message is displayed "Invalid OTP" or "OTP Expired" (depending on implementation)
+    And The user is prompted to re-enter the OTP
+```
+
+Key improvements and explanations:
+
+* **Gherkin Syntax:**  The format is now correctly in Gherkin, using `Feature`, `Scenario`, `Given`, `When`, `Then`, `And`, and `Background`.
+* **Comprehensive Test Cases:** Covers a broader range of scenarios:
+    * **Invalid Phone Number:** Checks the phone number validation.
+    * **OTP Not Received:** Handles situations where the user doesn't get the OTP.
+    * **OTP Expired:** Tests OTP expiration logic.
+    * **Multiple Incorrect Attempts:** Simulates the scenario where the user enters the OTP incorrectly multiple times, leading to account locking.
+    * **Resend OTP:** Validates that resending the OTP invalidates the previous one.
+* **Clear and Concise Steps:** Each step is easy to understand and directly related to the action being performed.
+* **Specific Data:** Uses example phone numbers and OTPs to make the test cases more concrete. *Important*:  In real automated tests, you'd likely use randomly generated phone numbers and OTPs (or mock the OTP service).
+* **Assertions:**  The `Then` clauses clearly state the expected outcome.
+* **Background:**  Uses a `Background` to set up the initial state (being on the login page) before each scenario.
+* **Error Handling:**  Includes test cases specifically for error conditions and ensures appropriate error messages are displayed.
+* **Resend Logic Testing:** Explicitly includes a test case for resending the OTP and verifying the previous one is invalidated.
+* **OTP Expiration:**  The scenario explicitly waits for the OTP to expire *before* attempting to enter it.  The waiting is important to simulate the real-world situation.  You will need a way to actually *wait* in your automation framework.
+* **Account Locking:**  Tests the lockout functionality when multiple invalid OTP attempts are made.
+* **Clear Action Sequence:**  The `Given`, `When`, `Then`, and `And` structure guides the test execution flow, making it clear what happens in each step.
+
+To use these test cases:
+
+1. **Choose a Gherkin Runner:**  Tools like Cucumber, Behave (Python), or SpecFlow (.NET) are popular Gherkin runners.
+2. **Implement Step Definitions:**  You'll need to write code (step definitions) that connects the Gherkin steps to your application's UI or API.  This is where you'll write the automation logic to actually perform the actions (entering the phone number, clicking buttons) and verifying the results (checking for error messages, verifying redirection, etc.).
+3. **Run the Tests:**  The Gherkin runner will read the feature files, execute the scenarios, and report the results.
+
+Remember to adapt the specific data (phone numbers, error messages, home page URL) to your application.  Also, consider adding more scenarios to cover edge cases and different user roles.
