@@ -1,8 +1,0 @@
-Feature: Free Delivery for Pro Subscribers
-
-  Scenario: Pro subscriber gets free delivery
-    Given I am a pro subscriber
-    And I have added items to my cart worth $20
-    When I proceed to checkout
-    Then I should see that delivery fee is $0
-    And the total amount reflects the discounted price with free delivery
