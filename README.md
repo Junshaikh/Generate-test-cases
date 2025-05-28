@@ -109,12 +109,6 @@ Feature: Reset password
 
 ---
 
-## 🛠 Contributing
-
-We welcome improvements! Please see [`CONTRIBUTING.md`](CONTRIBUTING.md) to get started.
-
----
-
 ## 🧰 Troubleshooting
 
 * **404 GitHub upload error?**
