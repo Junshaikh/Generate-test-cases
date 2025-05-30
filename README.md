@@ -1,130 +1,82 @@
-# 🔪 Generate Test Cases CLI
+# Generate Gherkin Test Cases CLI Tool
 
-A command-line tool that converts software requirements into clean, production-ready Gherkin test cases using **Gemini Pro (Google Generative AI)** and optionally uploads them directly to **GitHub**.
+A simple command-line tool to generate clean Gherkin-format software test cases from natural language requirements using Google's Gemini API, and optionally upload them to GitHub.
 
 ---
 
 ## 🚀 Features
 
-* ✅ CLI-friendly interface — ideal for CI/CD or manual QA flows
-* ✨ Auto-suggested test file names
-* 🧼 Clean Gherkin output (no markdown or scenario labels)
-* 🔐 .env-based configuration for secure key management
-* ☁️ Optional GitHub commit/upload with preview link
-* 🏷️ Organized by squad folders in `test-cases/`
+* Generate test cases in plain, clean Gherkin format
+* No markdown or extra labels like `**Scenario 1**`
+* Auto-suggest filenames from requirement
+* Prevent overwriting existing files
+* Optional upload to GitHub (configurable)
+* CLI arguments support
+* .env-based configuration for secrets and environment variables
 
 ---
 
-## 📆 Installation
+## 📦 Installation
+
+### 1. Clone the Repo
 
 ```bash
-# Clone the repo
-git clone https://github.com/junshaikh/generate-test-cases.git
-cd generate-test-cases
+git clone https://github.com/your-org/generate-tests-cli.git
+cd generate-tests-cli
+```
 
-# Install the CLI locally (editable mode)
+### 2. Set Up Environment Variables
+
+Copy the example file:
+
+```bash
+cp .env.example .env
+```
+
+Then edit `.env` to add your credentials:
+
+```env
+GOOGLE_API_KEY=your-gemini-api-key
+GITHUB_TOKEN=your-github-token
+GITHUB_REPO_OWNER=your-github-username-or-org
+GITHUB_REPO_NAME=your-repository-name
+GITHUB_BRANCH=main
+```
+
+> ✅ Use `.env.example` for sharing config format and add `.env` to `.gitignore`
+
+### 3. Install Dependencies
+
+```bash
+pip install -r requirements.txt
+```
+
+### 4. Install Locally as CLI
+
+```bash
 pip install -e .
 ```
 
 ---
 
-## ⚙️ Required Environment Variables
+## 🧪 Usage
 
-Create a `.env` file in the project root with the following variables:
+### Basic
 
-```env
-# Gemini API Key
-GOOGLE_API_KEY=your_gemini_api_key_here
-# GitHub (optional, only needed for uploads)
-GITHUB_TOKEN=your_github_personal_access_token
-GITHUB_REPO_OWNER=your_github_username_or_org
-GITHUB_REPO_NAME=your_repo_name
-GITHUB_BRANCH=main
-```
-
-> **Note:** You can generate your Gemini key from:
-> 👉 [https://aistudio.google.com/app/apikey](https://aistudio.google.com/app/apikey)
-
-> To generate a GitHub token:
-> 👉 [https://github.com/settings/tokens](https://github.com/settings/tokens)
-> ✅ Enable `repo` scope (for uploading files to a repo)
-
----
-
-## 🧲 Usage
-
-Basic example:
-
-```
-generate-tests --requirement "Reset password with email" --squad "squad-auth"
-```
-
-With a custom file name:
-
-```
+```bash
 generate-tests -r "Reset password" -s "squad-auth" -f "reset_password"
 ```
 
-Disable GitHub upload:
+### With GitHub Upload Disabled
 
-```
-generate-tests -r "Reset password" -s "squad-auth" --no-upload
-```
-
----
-
-## 📁 Output Structure
-
-Files are saved under:
-
-```
-test-cases/
-  └── squad-auth/
-        └── reset_password.txt
+```bash
+generate-tests -r "Reset password" -s "squad-auth" -f "reset_password" --no-github
 ```
 
----
+### CLI Options
 
-## 🔐 Keeping .env Secure
+| Flag                  | Description                          |
+| --------------------- | ------------------------------------ |
+| `-r`, `--requirement` | Requirement description *(required)* |
+| `-s`, `--squad`       | Squad nam                            |
 
-Add `.env` to your `.gitignore` to prevent accidental commits:
-
-```gitignore
-.env
-```
-
----
-
-## 💡 Example Output (Gherkin)
-
-```gherkin
-Feature: Reset password
-
-  Scenario: User resets password with email
-    Given the user is on the login page
-    When the user clicks "Forgot Password"
-    And enters a valid email address
-    Then a password reset link is sent
-```
-
----
-
-## 🧰 Troubleshooting
-
-* **404 GitHub upload error?**
-  Double-check your repo name, owner, and token scopes.
-
-* **Nothing runs?**
-  Make sure you’re using Python 3.8+, `.env` is loaded, and dependencies installed.
-
----
-
-## ✨ Credits
-
-Created by [@junshaikh](https://github.com/junshaikh) — inspired by manual QA pain 😅
-
----
-
-## 📄 License
-
-MIT License. Use freely and improve collaboratively.
