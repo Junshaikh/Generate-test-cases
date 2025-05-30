@@ -61,7 +61,7 @@ def generate_test_cases(requirement, squad, custom_filename=None, skip_upload=Fa
         print("⚠️ Skipping GitHub upload (--no-upload enabled)")
 
 def upload_to_github(content, file_name, squad, tag=None):
-    github_token = ${{ secrets.GITHUB_TOKEN }}
+    GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     repo_owner = os.getenv("GITHUB_REPO_OWNER")
     repo_name = os.getenv("GITHUB_REPO_NAME")
     file_path = f"test-cases/{squad}/{file_name}"
@@ -69,7 +69,7 @@ def upload_to_github(content, file_name, squad, tag=None):
 
     url = f"https://api.github.com/repos/{repo_owner}/{repo_name}/contents/{file_path}"
     headers = {
-        "Authorization": f"token {github_token}",
+        "Authorization": f"Bearer {github_token}",
         "Accept": "application/vnd.github+json"
     }
 
