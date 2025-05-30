@@ -4,45 +4,52 @@ on:
   workflow_dispatch:
     inputs:
       requirement:
-        description: 'Requirement Description'
+        description: 'Requirement (e.g. Reset password)'
         required: true
       squad:
-        description: 'Squad Name'
+        description: 'Squad name (e.g. squad-auth)'
         required: true
-      filename:
-        description: 'Test Case File Name (without extension)'
+      file_name:
+        description: 'Test case file name (e.g. reset_password)'
+        required: true
+      tag:
+        description: 'Priority tag (e.g. P0, P1)'
         required: false
-      no_upload:
-        description: 'Skip GitHub upload?'
+        default: ''
+      skip_github_upload:
+        description: 'Skip GitHub upload (true/false)'
         required: false
         default: 'false'
 
 jobs:
   generate:
     runs-on: ubuntu-latest
+
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
+    - name: Checkout code
+      uses: actions/checkout@v3
 
-      - name: Set up Python
-        uses: actions/setup-python@v4
-        with:
-          python-version: '3.10'
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.10'
 
-      - name: Install dependencies
-        run: |
-          pip install -e .
+    - name: Install dependencies
+      run: |
+        pip install -e .
+        pip install -r requirement.txt
 
-      - name: Generate Test Cases
-        env:
-          GOOGLE_API_KEY: ${{ secrets.GOOGLE_API_KEY }}
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          GITHUB_REPO_OWNER: ${{ github.repository_owner }}
-          GITHUB_REPO_NAME: ${{ github.event.repository.name }}
-          GITHUB_BRANCH: main
-          REQUIREMENT: ${{ github.event.inputs.requirement }}
-          SQUAD: ${{ github.event.inputs.squad }}
-          FILENAME: ${{ github.event.inputs.filename }}
-          NO_UPLOAD: ${{ github.event.inputs.no_upload }}
-        run: |
-          generate-tests
+    - name: Run test case generator
+      env:
+        GOOGLE_API_KEY: ${{ secrets.GOOGLE_API_KEY }}
+        GITHUB_TOKEN: ${{ secrets.PERSONAL_GITHUB_TOKEN }}
+        GITHUB_REPO_OWNER: ${{ github.repository_owner }}
+        GITHUB_REPO_NAME: ${{ github.event.repository.name }}
+        GITHUB_BRANCH: main
+      run: |
+        generate-tests \
+          --requirement "${{ github.event.inputs.requirement }}" \
+          --squad "${{ github.event.inputs.squad }}" \
+          --file-name "${{ github.event.inputs.file_name }}" \
+          --tag "${{ github.event.inputs.tag }}" \
+          $([[ "${{ github.event.inputs.skip_github_upload }}" == "true" ]] && echo "--no-upload")
