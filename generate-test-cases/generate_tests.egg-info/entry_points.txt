@@ -1,2 +1,0 @@
-[console_scripts]
-generate-tests = generate_tests.cli:main
