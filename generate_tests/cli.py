@@ -93,10 +93,6 @@ def upload_to_github(content, file_name, squad, tag=None):
     else:
         print(f"❌ Failed to upload file: {response.status_code} - {response.text}")
         
-    print("GOOGLE_API_KEY:", os.getenv("GOOGLE_API_KEY")[:5] + "...")
-    print("GITHUB_REPO_OWNER:", os.getenv("GITHUB_REPO_OWNER"))
-    print("GITHUB_REPO_NAME:", os.getenv("GITHUB_REPO_NAME"))
-    print("GITHUB_BRANCH:", os.getenv("GITHUB_BRANCH"))
 
 def main():
     parser = argparse.ArgumentParser(description="Generate Gherkin test cases from a requirement.")
