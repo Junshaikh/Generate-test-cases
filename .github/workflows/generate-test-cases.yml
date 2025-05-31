@@ -10,7 +10,7 @@ on:
         description: "Squad name (e.g., squad-auth)"
         required: true
       file-name:
-        description: "Optional custom file name"
+        description: "Test file name (e.g., login-with-email)"
         required: false
       tag:
         description: "Priority tag (e.g., P0, P1)"
