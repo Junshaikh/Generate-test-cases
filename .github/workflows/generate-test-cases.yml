@@ -4,56 +4,50 @@ on:
   workflow_dispatch:
     inputs:
       requirement:
-        description: 'Requirement (e.g. Reset password)'
+        description: "Requirement description"
         required: true
       squad:
-        description: 'Squad name (e.g. squad-auth)'
+        description: "Squad name (e.g., squad-auth)"
         required: true
-      file_name:
-        description: 'Test case file name (e.g. reset_password)'
-        required: true
+      file-name:
+        description: "Optional custom file name"
+        required: false
       tag:
-        description: 'Priority tag (e.g. P0, P1)'
+        description: "Priority tag (e.g., P0, P1)"
         required: false
-        default: ''
-      skip_github_upload:
-        description: 'Skip GitHub upload (true/false)'
+      other-tags:
+        description: "Other tags (e.g., smoke, login, regression)"
         required: false
-        default: 'false'
-
-permissions:
-  contents: write
-
 
 jobs:
   generate:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v3
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
-    - name: Set up Python
-      uses: actions/setup-python@v4
-      with:
-        python-version: '3.10'
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.10"
 
-    - name: Install dependencies
-      run: |
-        pip install -e .
-        pip install -r requirement.txt
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install .
 
-    - name: Run test case generator
-      env:
-        GOOGLE_API_KEY: ${{ secrets.GOOGLE_API_KEY }}
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        GITHUB_REPO_OWNER: ${{ github.repository_owner }}
-        GITHUB_REPO_NAME: ${{ github.event.repository.name }}
-        GITHUB_BRANCH: main
-      run: |
-        generate-tests \
-          --requirement "${{ github.event.inputs.requirement }}" \
-          --squad "${{ github.event.inputs.squad }}" \
-          --file-name "${{ github.event.inputs.file_name }}" \
-          --tag "${{ github.event.inputs.tag }}" \
-          $([[ "${{ github.event.inputs.skip_github_upload }}" == "true" ]] && echo "--no-upload")
+      - name: Generate test cases
+        env:
+          GOOGLE_API_KEY: ${{ secrets.GOOGLE_API_KEY }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_REPO_OWNER: ${{ github.repository_owner }}
+          GITHUB_REPO_NAME: ${{ github.event.repository.name }}
+          GITHUB_BRANCH: ${{ github.ref_name }}
+        run: |
+          generate-tests \
+            --requirement "${{ github.event.inputs.requirement }}" \
+            --squad "${{ github.event.inputs.squad }}" \
+            --file-name "${{ github.event.inputs.file-name }}" \
+            --tag "${{ github.event.inputs.tag }}" \
+            --other-tags "${{ github.event.inputs.other-tags }}"
