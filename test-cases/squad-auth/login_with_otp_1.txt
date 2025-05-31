@@ -1,0 +1,49 @@
+@P0
+
+Feature: Login with OTP
+
+  Scenario: Successful Login with Valid OTP
+    Given User is on the login page
+    When User enters a valid phone number
+    And User clicks on "Send OTP"
+    Then An OTP is sent to the user's phone number
+    And User enters the OTP received
+    And User clicks on "Verify OTP"
+    Then User should be logged in successfully
+    And User should be redirected to the home page
+
+  Scenario: Unsuccessful Login with Invalid OTP
+    Given User is on the login page
+    When User enters a valid phone number
+    And User clicks on "Send OTP"
+    Then An OTP is sent to the user's phone number
+    And User enters an invalid OTP
+    And User clicks on "Verify OTP"
+    Then User should see an error message "Invalid OTP"
+    And User remains on the login page
+
+  Scenario: Unsuccessful Login with Expired OTP
+    Given User is on the login page
+    When User enters a valid phone number
+    And User clicks on "Send OTP"
+    Then An OTP is sent to the user's phone number
+    And User waits for the OTP to expire
+    And User enters the expired OTP
+    And User clicks on "Verify OTP"
+    Then User should see an error message "OTP Expired"
+    And User remains on the login page
+
+  Scenario: Unsuccessful Login with Missing Phone Number
+    Given User is on the login page
+    When User clicks on "Send OTP" without entering a phone number
+    Then User should see an error message "Please enter a phone number"
+    And User remains on the login page
+
+  Scenario: Successful OTP Resend
+    Given User is on the login page
+    When User enters a valid phone number
+    And User clicks on "Send OTP"
+    Then An OTP is sent to the user's phone number
+    And User clicks on "Resend OTP"
+    Then A new OTP is sent to the user's phone number
+    And User can use the new OTP to login successfully
