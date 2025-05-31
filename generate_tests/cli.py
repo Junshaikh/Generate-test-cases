@@ -51,7 +51,7 @@ def generate_test_cases(requirement, squad, custom_filename=None, skip_upload=Fa
     test_cases = clean_gherkin_output(test_cases_raw)
     
     if tag:
-    test_cases = f"@{tag}\n\n" + test_cases
+        test_cases = f"@{tag}\n\n" + test_cases
 
     with open(local_path, "w") as file:
         file.write(test_cases)
