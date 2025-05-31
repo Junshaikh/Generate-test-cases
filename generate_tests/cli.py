@@ -60,7 +60,7 @@ def generate_test_cases(requirement, squad, custom_filename=None, skip_upload=Fa
     else:
         print("⚠️ Skipping GitHub upload (--no-upload enabled)")
 
-def upload_to_github(content, file_name, squad):
+def upload_to_github(content, file_name, squad, tag=None):
     github_token = os.getenv("GITHUB_TOKEN")
     repo_owner = os.getenv("GITHUB_REPO_OWNER")
     repo_name = os.getenv("GITHUB_REPO_NAME")
@@ -69,12 +69,14 @@ def upload_to_github(content, file_name, squad):
 
     url = f"https://api.github.com/repos/{repo_owner}/{repo_name}/contents/{file_path}"
     headers = {
-        "Authorization": f"Bearer {github_token}",  # ✅ Use Bearer instead of token
+        "Authorization": f"Bearer {github_token}",
         "Accept": "application/vnd.github+json"
     }
 
     file_url = f"https://github.com/{repo_owner}/{repo_name}/blob/{branch}/{file_path}"
-    message = f"Add test cases for `{file_name}` in `{squad}` squad.\n\nPreview: {file_url}"
+
+    tag_msg = f"\n\n**Tag**: `{tag}`" if tag else ""
+    message = f"Add test cases for `{file_name}` in `{squad}` squad.{tag_msg}\n\nPreview: {file_url}"
     encoded_content = base64.b64encode(content.encode()).decode()
 
     data = {
