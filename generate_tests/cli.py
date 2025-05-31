@@ -31,7 +31,7 @@ def get_unique_filename(folder_path, base_filename):
         counter += 1
     return os.path.basename(full_path)
 
-def generate_test_cases(requirement, squad, custom_filename=None, skip_upload=False, tag=None):
+def generate_test_cases(requirement, squad, custom_filename=None, skip_upload=False, tag=None, other_tags=None):
     squad = sanitize_filename(squad)
     suggested_filename = sanitize_filename(requirement)
     base_filename = sanitize_filename(custom_filename) if custom_filename else suggested_filename
@@ -49,9 +49,18 @@ def generate_test_cases(requirement, squad, custom_filename=None, skip_upload=Fa
     response = model.generate_content(prompt)
     test_cases_raw = response.text
     test_cases = clean_gherkin_output(test_cases_raw)
-    
+
+    # Build tag line
+    tags_line = []
     if tag:
-        test_cases = f"@{tag}\n\n" + test_cases
+        tags_line.append(f"@{tag}")
+    if other_tags:
+        # Split on spaces, commas, or newlines
+        extra_tags = re.split(r"[,\s]+", other_tags.strip())
+        tags_line.extend([t if t.startswith("@") else f"@{t}" for t in extra_tags if t])
+
+    if tags_line:
+        test_cases = " ".join(tags_line) + "\n\n" + test_cases
 
     with open(local_path, "w") as file:
         file.write(test_cases)
@@ -59,11 +68,11 @@ def generate_test_cases(requirement, squad, custom_filename=None, skip_upload=Fa
     print(f"✅ Test cases saved to {local_path}")
 
     if not skip_upload:
-        upload_to_github(test_cases, final_filename, squad, tag)
+        upload_to_github(test_cases, final_filename, squad, tag, other_tags)
     else:
         print("⚠️ Skipping GitHub upload (--no-upload enabled)")
 
-def upload_to_github(content, file_name, squad, tag=None):
+def upload_to_github(content, file_name, squad, tag=None, other_tags=None):
     github_token = os.getenv("GITHUB_TOKEN")
     repo_owner = os.getenv("GITHUB_REPO_OWNER")
     repo_name = os.getenv("GITHUB_REPO_NAME")
@@ -78,7 +87,16 @@ def upload_to_github(content, file_name, squad, tag=None):
 
     file_url = f"https://github.com/{repo_owner}/{repo_name}/blob/{branch}/{file_path}"
 
-    tag_msg = f"\n\n**Tag**: `{tag}`" if tag else ""
+    tag_msg = ""
+    if tag or other_tags:
+        combined_tags = []
+        if tag:
+            combined_tags.append(f"`@{tag}`")
+        if other_tags:
+            extra_tags = re.split(r"[,\s]+", other_tags.strip())
+            combined_tags.extend([f"`@{t}`" if not t.startswith("@") else f"`{t}`" for t in extra_tags if t])
+        tag_msg = "\n\n**Tags**: " + ", ".join(combined_tags)
+
     message = f"Add test cases for `{file_name}` in `{squad}` squad.{tag_msg}\n\nPreview: {file_url}"
     encoded_content = base64.b64encode(content.encode()).decode()
 
@@ -99,9 +117,12 @@ def main():
     parser.add_argument("--requirement", "-r", help="Requirement description", default=os.getenv("REQUIREMENT"))
     parser.add_argument("--squad", "-s", help="Squad name (e.g., squad-auth)", default=os.getenv("SQUAD"))
     parser.add_argument("--file-name", "-f", help="Custom file name", default=os.getenv("FILE_NAME"))
-    parser.add_argument("--tag", "-t", help="Tag (e.g., P0, P1)", default=os.getenv("TAG"))
+    parser.add_argument("--tag", "-t", help="Priority tag (e.g., P0, P1)", default=os.getenv("TAG"))
+    parser.add_argument("--other-tags", help="Other tags (e.g., smoke, login)", default=os.getenv("OTHER_TAGS"))
     parser.add_argument("--no-upload", action="store_true", default=os.getenv("NO_UPLOAD") == "true")
 
     args = parser.parse_args()
-    generate_test_cases(args.requirement, args.squad, args.file_name, args.no_upload, args.tag)
+    generate_test_cases(args.requirement, args.squad, args.file_name, args.no_upload, args.tag, args.other_tags)
 
+if __name__ == "__main__":
+    main()
