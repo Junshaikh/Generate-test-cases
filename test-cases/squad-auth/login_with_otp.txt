@@ -1,0 +1,66 @@
+Feature: Login with OTP
+
+  Scenario: Successful Login with Valid OTP
+    Given I am on the login page
+    When I enter my valid phone number "1234567890"
+    And I click the "Send OTP" button
+    Then I should receive an OTP on my phone
+    And I enter the OTP "123456"
+    And I click the "Verify OTP" button
+    Then I should be logged in successfully
+    And I should see the "Welcome" message
+
+  Scenario: Login with Invalid OTP
+    Given I am on the login page
+    When I enter my valid phone number "1234567890"
+    And I click the "Send OTP" button
+    Then I should receive an OTP on my phone
+    And I enter an invalid OTP "000000"
+    And I click the "Verify OTP" button
+    Then I should see an error message "Invalid OTP"
+    And I should remain on the login page
+
+  Scenario: Resend OTP
+    Given I am on the login page
+    When I enter my valid phone number "1234567890"
+    And I click the "Send OTP" button
+    Then I should receive an OTP on my phone
+    When I click the "Resend OTP" button
+    Then I should receive a new OTP on my phone
+    And I enter the new OTP "654321"
+    And I click the "Verify OTP" button
+    Then I should be logged in successfully
+    And I should see the "Welcome" message
+
+  Scenario: Login with Expired OTP
+    Given I am on the login page
+    When I enter my valid phone number "1234567890"
+    And I click the "Send OTP" button
+    Then I should receive an OTP on my phone
+    And I wait for the OTP to expire
+    And I enter the expired OTP "123456"
+    And I click the "Verify OTP" button
+    Then I should see an error message "OTP Expired"
+    And I should remain on the login page
+
+  Scenario: Login with Empty Phone Number
+    Given I am on the login page
+    When I click the "Send OTP" button
+    Then I should see an error message "Phone number is required"
+    And I should remain on the login page
+
+  Scenario: Login with Invalid Phone Number Format
+    Given I am on the login page
+    When I enter an invalid phone number "123"
+    And I click the "Send OTP" button
+    Then I should see an error message "Invalid phone number format"
+    And I should remain on the login page
+
+  Scenario: Verify OTP button is disabled until OTP entered
+    Given I am on the login page
+    When I enter my valid phone number "1234567890"
+    And I click the "Send OTP" button
+    Then I should receive an OTP on my phone
+    Then the "Verify OTP" button should be disabled
+    When I enter the OTP "123456"
+    Then the "Verify OTP" button should be enabled
