@@ -42,7 +42,7 @@ jobs:
     - name: Run test case generator
       env:
         GOOGLE_API_KEY: ${{ secrets.GOOGLE_API_KEY }}
-        GITHUB_TOKEN: ${{ secrets.PERSONAL_GITHUB_TOKEN }}
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         GITHUB_REPO_OWNER: ${{ github.repository_owner }}
         GITHUB_REPO_NAME: ${{ github.event.repository.name }}
         GITHUB_BRANCH: main
