@@ -1,0 +1,56 @@
+@P0 @login @smoke @regression @U&L
+
+Feature: Facebook Login
+
+  Scenario: Successful Facebook Login
+    Given I am on the Facebook login page
+    When I enter valid Facebook credentials
+    And I click the "Log In" button
+    Then I should be logged in successfully
+    And I should be redirected to my Facebook home page
+
+  Scenario: Unsuccessful Facebook Login - Invalid Credentials
+    Given I am on the Facebook login page
+    When I enter invalid Facebook credentials
+    And I click the "Log In" button
+    Then I should see an error message indicating invalid credentials
+
+  Scenario: Unsuccessful Facebook Login - Empty Credentials
+    Given I am on the Facebook login page
+    When I leave the email and password fields empty
+    And I click the "Log In" button
+    Then I should see an error message indicating required fields are empty
+
+  Scenario: Unsuccessful Facebook Login - Invalid Email Format
+    Given I am on the Facebook login page
+    When I enter an invalid email format in the email field
+    And I enter a valid password
+    And I click the "Log In" button
+    Then I should see an error message indicating invalid email format
+
+  Scenario: Facebook Login - Forgotten Password Link
+    Given I am on the Facebook login page
+    When I click the "Forgotten Password?" link
+    Then I should be redirected to the password recovery page
+
+  Scenario: Facebook Login - Remember Me Functionality
+    Given I am on the Facebook login page
+    When I enter valid Facebook credentials
+    And I select the "Remember Me" checkbox
+    And I click the "Log In" button
+    Then I should be logged in successfully
+    And When I close the browser and reopen it
+    Then I should still be logged in
+
+  Scenario: Facebook Login - Account Creation Link
+    Given I am on the Facebook login page
+    When I click the "Create New Account" button
+    Then I should be redirected to the Facebook account creation page
+
+  Scenario: Facebook Login - Email Case Insensitivity
+    Given I am on the Facebook login page
+    When I enter my email in uppercase
+    And I enter my correct password
+    And I click the "Log In" button
+    Then I should be logged in successfully
+    And I should be redirected to my Facebook home page
