@@ -1,0 +1,63 @@
+@P0 @smoke @login
+
+Feature: Login with Email
+
+  Scenario: Successful login with valid email and password
+    Given the user is on the login page
+    When the user enters a valid email "test@example.com" in the email field
+    And the user enters a valid password "Password123!" in the password field
+    And the user clicks the "Login" button
+    Then the user should be logged in successfully
+    And the user should be redirected to the home page
+    And the user should see a welcome message
+
+  Scenario: Unsuccessful login with invalid email format
+    Given the user is on the login page
+    When the user enters an invalid email "testexample.com" in the email field
+    And the user enters a valid password "Password123!" in the password field
+    And the user clicks the "Login" button
+    Then the user should see an error message indicating invalid email format
+
+  Scenario: Unsuccessful login with incorrect password
+    Given the user is on the login page
+    When the user enters a valid email "test@example.com" in the email field
+    And the user enters an incorrect password "wrongpassword" in the password field
+    And the user clicks the "Login" button
+    Then the user should see an error message indicating incorrect credentials
+
+  Scenario: Unsuccessful login with unregistered email
+    Given the user is on the login page
+    When the user enters an unregistered email "unregistered@example.com" in the email field
+    And the user enters a valid password "Password123!" in the password field
+    And the user clicks the "Login" button
+    Then the user should see an error message indicating that the email is not registered
+
+  Scenario: Login with empty email field
+    Given the user is on the login page
+    When the user enters an empty email in the email field
+    And the user enters a valid password "Password123!" in the password field
+    And the user clicks the "Login" button
+    Then the user should see an error message indicating that the email field is required
+
+  Scenario: Login with empty password field
+    Given the user is on the login page
+    When the user enters a valid email "test@example.com" in the email field
+    And the user enters an empty password in the password field
+    And the user clicks the "Login" button
+    Then the user should see an error message indicating that the password field is required
+
+  Scenario: Login with empty email and password fields
+    Given the user is on the login page
+    When the user enters an empty email in the email field
+    And the user enters an empty password in the password field
+    And the user clicks the "Login" button
+    Then the user should see error messages indicating that both email and password fields are required
+
+  Scenario: Show/Hide Password functionality
+    Given the user is on the login page
+    When the user enters a valid email "test@example.com" in the email field
+    And the user enters a valid password "Password123!" in the password field
+    And the user clicks the "Show Password" icon
+    Then the password field should display the password in plain text
+    When the user clicks the "Hide Password" icon
+    Then the password field should display the password in masked format
