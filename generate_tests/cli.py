@@ -5,6 +5,7 @@ import requests
 import base64
 import argparse
 from dotenv import load_dotenv
+
 load_dotenv()
 
 # Load Gemini API key from environment
@@ -31,7 +32,7 @@ def get_unique_filename(folder_path, base_filename):
         counter += 1
     return os.path.basename(full_path)
 
-def generate_test_cases(requirement, squad, custom_filename=None, skip_upload=False, tag=None, other_tags=None):
+def generate_test_cases(requirement, squad, custom_filename=None, skip_upload=False, tag=None, other_tags=None, background=None, pre_requisite=None):
     squad = sanitize_filename(squad)
     suggested_filename = sanitize_filename(requirement)
     base_filename = sanitize_filename(custom_filename) if custom_filename else suggested_filename
@@ -42,10 +43,21 @@ def generate_test_cases(requirement, squad, custom_filename=None, skip_upload=Fa
     local_path = os.path.join(folder_path, final_filename)
 
     model = genai.GenerativeModel("gemini-2.0-flash")
-    prompt = (
-        f"Generate functional software test cases in clean Gherkin format for this requirement: {requirement}.\n"
-        f"Do NOT add any labels like Scenario 1/2 or markdown formatting such as ```gherkin. Only clean Gherkin."
-    )
+
+    # Build enhanced prompt
+    prompt = f"""Generate functional software test cases in clean Gherkin format for a food delivery application.
+
+Requirement:
+{requirement}
+
+"""
+    if background:
+        prompt += f"Background:\n{background}\n\n"
+    if pre_requisite:
+        prompt += f"Pre-requisite:\n{pre_requisite}\n\n"
+
+    prompt += "Only output clean Gherkin. Do not include markdown or labels like `Scenario 1` or ```gherkin."
+
     response = model.generate_content(prompt)
     test_cases_raw = response.text
     test_cases = clean_gherkin_output(test_cases_raw)
@@ -55,7 +67,6 @@ def generate_test_cases(requirement, squad, custom_filename=None, skip_upload=Fa
     if tag:
         tags_line.append(f"@{tag}")
     if other_tags:
-        # Split on spaces, commas, or newlines
         extra_tags = re.split(r"[,\s]+", other_tags.strip())
         tags_line.extend([t if t.startswith("@") else f"@{t}" for t in extra_tags if t])
 
@@ -119,10 +130,21 @@ def main():
     parser.add_argument("--file-name", "-f", help="Custom file name", default=os.getenv("FILE_NAME"))
     parser.add_argument("--tag", "-t", help="Priority tag (e.g., P0, P1)", default=os.getenv("TAG"))
     parser.add_argument("--other-tags", help="Other tags (e.g., smoke, login)", default=os.getenv("OTHER_TAGS"))
+    parser.add_argument("--background", help="Background context (e.g., user is logged in)", default=os.getenv("BACKGROUND"))
+    parser.add_argument("--pre-requisite", help="Pre-requisite steps before scenarios", default=os.getenv("PRE_REQUISITE"))
     parser.add_argument("--no-upload", action="store_true", default=os.getenv("NO_UPLOAD") == "true")
 
     args = parser.parse_args()
-    generate_test_cases(args.requirement, args.squad, args.file_name, args.no_upload, args.tag, args.other_tags)
+    generate_test_cases(
+        args.requirement,
+        args.squad,
+        args.file_name,
+        args.no_upload,
+        args.tag,
+        args.other_tags,
+        args.background,
+        args.pre_requisite,
+    )
 
 if __name__ == "__main__":
     main()
