@@ -30,7 +30,7 @@ def get_unique_filename(folder_path, base_filename):
         counter += 1
     return os.path.basename(full_path)
 
-def generate_test_cases(requirement, squad, custom_filename=None, skip_upload=False, tag=None, other_tags=None, background=None, pre_requisite=None):
+def generate_test_cases(requirement, squad, custom_filename=None, skip_upload=False, tag=None, other_tags=None, background=None, additional_background=None):
     squad = sanitize_filename(squad)
     suggested_filename = sanitize_filename(requirement)
     base_filename = sanitize_filename(custom_filename) if custom_filename else suggested_filename
@@ -41,19 +41,13 @@ def generate_test_cases(requirement, squad, custom_filename=None, skip_upload=Fa
 
     model = genai.GenerativeModel("gemini-2.0-flash")
 
-    prompt = f"""Generate functional software test cases in clean Gherkin format for a food delivery app.
-
-Background:
-Talabat food application
-"""
+    prompt = f"Generate functional software test cases in clean Gherkin format.\n"
     if background:
-        prompt += f"Additional Background:\n{background}\n"
-
-    if pre_requisite:
-        prompt += f"\nPre-requisites:\n{pre_requisite}"
-
-    prompt += f"\n\nRequirement:\n{requirement}\n\n"
-    prompt += "Ensure clean Gherkin format. Do not include 'Scenario 1/2' or markdown (like ```gherkin)."
+        prompt += f"\nBackground:\n{background.strip()}"
+    if additional_background:
+        prompt += f"\n\nAdditional Background:\n{additional_background.strip()}"
+    prompt += f"\n\nRequirement:\n{requirement.strip()}\n\n"
+    prompt += "Only return clean Gherkin. No markdown formatting, no Scenario labels like 'Scenario 1', etc."
 
     response = model.generate_content(prompt)
     test_cases_raw = response.text
@@ -127,7 +121,7 @@ def main():
     parser.add_argument("--tag", "-t", default=os.getenv("TAG"))
     parser.add_argument("--other-tags", default=os.getenv("OTHER_TAGS"))
     parser.add_argument("--background", default=os.getenv("BACKGROUND"))
-    parser.add_argument("--pre-requisite", default=os.getenv("PRE_REQUISITE"))
+    parser.add_argument("--additional-background", default=os.getenv("ADDITIONAL_BACKGROUND"))
     parser.add_argument("--no-upload", action="store_true", default=os.getenv("NO_UPLOAD") == "true")
 
     args = parser.parse_args()
@@ -139,7 +133,7 @@ def main():
         args.tag,
         args.other_tags,
         args.background,
-        args.pre_requisite
+        args.additional_background
     )
 
 if __name__ == "__main__":
