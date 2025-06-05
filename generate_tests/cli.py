@@ -47,12 +47,15 @@ def generate_test_cases(requirement, squad, custom_filename=None, skip_upload=Fa
     # Build enhanced prompt
     prompt = f"""Generate functional software test cases in clean Gherkin format for a food delivery application.
 
+    Background:
+    Talabat food application
+
 Requirement:
 {requirement}
 
 """
     if background:
-        prompt += f"Background:\n{background}\n\n"
+        prompt += f"Additional Background:\n{background}\n\n"
     if pre_requisite:
         prompt += f"Pre-requisite:\n{pre_requisite}\n\n"
 
