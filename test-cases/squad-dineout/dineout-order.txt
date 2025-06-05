@@ -1,0 +1,83 @@
+@P0 @smoke @login
+
+Background:
+    Given I am a logged-in user with a Talabat Pro subscription
+
+Feature: Dine-out in Dubai Business Bay
+
+    Scenario: Successfully find dine-out restaurants in Dubai Business Bay
+        Given I am on the Talabat home screen
+        When I tap on the "Dine-out" option
+        And I enter "Dubai Business Bay" in the location search field
+        Then I should see a list of restaurants in Dubai Business Bay that offer dine-in
+        And I should see the distance and estimated travel time to each restaurant
+        And I should see the restaurant's average rating
+
+    Scenario: Apply filters and sort options for dine-out restaurants
+        Given I am viewing dine-out restaurants in Dubai Business Bay
+        When I tap on the "Filters" button
+        And I select "Cuisine" as "Italian"
+        And I select "Price Range" as "Mid-Range"
+        And I tap on "Apply Filters"
+        Then I should see only Italian restaurants within the specified price range
+        When I select "Sort By" as "Rating"
+        Then the restaurants should be sorted by rating, highest first
+
+    Scenario: View restaurant details and available booking slots
+        Given I am viewing the list of dine-out restaurants in Dubai Business Bay
+        When I tap on a specific restaurant, e.g., "Bella Vista"
+        Then I should see the restaurant's details, including address, menu, and reviews
+        And I should see the available booking slots for different dates and times
+        And I should see the estimated price per person
+        And I should see the restaurant's contact number
+
+    Scenario: Attempt to book a table without selecting a time slot
+        Given I am viewing the restaurant details for "Bella Vista"
+        When I tap on the "Book a Table" button
+        And I specify the number of guests as "2"
+        And I tap on the "Confirm Booking" button
+        Then I should see an error message indicating that I need to select a time slot
+
+    Scenario: Successfully book a table at a restaurant
+        Given I am viewing the restaurant details for "Bella Vista"
+        When I tap on the "Book a Table" button
+        And I specify the number of guests as "2"
+        And I select a time slot, e.g., "Tomorrow 8:00 PM"
+        And I tap on the "Confirm Booking" button
+        Then I should see a booking confirmation message
+        And I should receive a booking confirmation email and SMS
+        And the booking should appear in my "Bookings" section
+
+    Scenario: Cancel a dine-out booking
+        Given I have a confirmed dine-out booking at "Bella Vista"
+        When I go to the "Bookings" section
+        And I select the "Bella Vista" booking
+        And I tap on the "Cancel Booking" button
+        And I confirm the cancellation
+        Then I should see a cancellation confirmation message
+        And I should receive a cancellation confirmation email and SMS
+        And the booking should no longer appear in my "Bookings" section
+
+    Scenario: Verify Talabat Pro discount for dine-out bookings
+        Given I am viewing the restaurant details for "Bella Vista" which offers a Talabat Pro discount
+        When I tap on the "Book a Table" button
+        And I specify the number of guests as "2"
+        And I select a time slot, e.g., "Tomorrow 8:00 PM"
+        Then I should see the Talabat Pro discount applied to the booking cost
+        And the final booking cost should reflect the discount
+
+    Scenario: Search for dine-out restaurants using keywords
+        Given I am on the Talabat home screen
+        When I tap on the "Dine-out" option
+        And I enter "Sushi" in the search field
+        And I enter "Dubai Business Bay" in the location search field
+        Then I should see a list of restaurants in Dubai Business Bay that offer dine-in and match the keyword "Sushi"
+
+    Scenario: Attempt to book a table at a fully booked restaurant
+        Given I am viewing the restaurant details for "Bella Vista"
+        When the restaurant is fully booked for the selected date and time
+        And I tap on the "Book a Table" button
+        And I specify the number of guests as "2"
+        And I select the fully booked time slot
+        And I tap on the "Confirm Booking" button
+        Then I should see an error message indicating that the time slot is unavailable
