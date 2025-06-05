@@ -1,0 +1,91 @@
+@P0 @smoke @login @regression
+
+Feature: Ordering Grocery on Talabat
+
+  Background:
+    Given I am a logged-in user with a Talabat Pro subscription
+
+  Scenario: Browse Grocery Stores
+    Given I am on the Talabat home screen
+    When I tap on the "Grocery" tab
+    Then I should see a list of available grocery stores in my area
+
+  Scenario: Filter Grocery Stores by Distance
+    Given I am browsing grocery stores
+    When I select to filter by "Distance"
+    Then the grocery stores should be sorted by proximity to my location
+
+  Scenario: Search for a Specific Grocery Item
+    Given I am browsing grocery stores
+    When I search for "Milk"
+    Then I should see a list of grocery stores that sell milk
+    And the results should be relevant to my search query
+
+  Scenario: Add Items to Grocery Cart
+    Given I am viewing the items in "Spinneys" grocery store
+    When I add "Milk (1L)" to my cart
+    And I add "Eggs (12)" to my cart
+    Then I should see "2 items" in my cart
+
+  Scenario: View and Modify Grocery Cart
+    Given I have items in my grocery cart
+    When I tap on the cart icon
+    Then I should see a list of items in my cart
+    And I can increase/decrease the quantity of each item
+    And I can remove items from the cart
+
+  Scenario: Proceed to Checkout for Grocery Order
+    Given I have items in my grocery cart
+    When I proceed to checkout
+    Then I should see my delivery address
+    And I should see a summary of my order
+    And I should see available payment options
+
+  Scenario: Select Delivery Time Slot for Grocery Order
+    Given I am at the checkout page for a grocery order
+    When I select a delivery time slot
+    Then the available time slots should be displayed
+    And I can select a preferred time slot
+
+  Scenario: Apply a Promo Code to Grocery Order
+    Given I am at the checkout page for a grocery order
+    When I enter a valid promo code "GROCERY10"
+    Then the promo code should be applied to my order
+    And the total amount should be reduced
+
+  Scenario: Place Grocery Order with Credit Card
+    Given I am at the checkout page for a grocery order
+    When I select to pay with "Credit Card"
+    And I confirm my order
+    Then I should be redirected to the payment gateway
+    And my order should be placed successfully
+
+  Scenario: Verify Grocery Order Confirmation
+    Given I have successfully placed a grocery order
+    Then I should receive an order confirmation message
+    And I should see the order details in my order history
+    And the grocery store should start preparing my order
+
+  Scenario: Track Grocery Order Status
+    Given I have placed a grocery order
+    When I go to my order history
+    Then I should see the current status of my order
+    And I can track the driver's location on the map
+
+  Scenario: Cancel a Grocery Order Before Preparation
+    Given I have placed a grocery order that has not started preparation
+    When I cancel the order
+    Then I should receive a cancellation confirmation
+    And I should receive a refund according to the policy
+
+  Scenario: Grocery Order Delivered Successfully
+    Given my grocery order has been delivered
+    Then I should receive a notification
+    And the order status should be updated to "Delivered"
+    And I can rate and review the grocery store
+
+  Scenario: Contact Support for Grocery Order Issues
+    Given I have an issue with my grocery order
+    When I contact customer support
+    Then I should be able to explain my issue
+    And I should receive assistance from customer support
