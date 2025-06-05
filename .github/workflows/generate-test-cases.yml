@@ -6,6 +6,16 @@ on:
       requirement:
         description: "Requirement description"
         required: true
+      background:
+        description: "Background context"
+        required: true
+        default: "Talabat food application"
+        type: choice
+        options:
+          - Talabat food application 
+      additional-background:
+        description: "Additional context (e.g., logged in user, pro subscribed user)"
+        required: false
       squad:
         description: "Squad name (e.g., squad-auth)"
         required: true
@@ -17,13 +27,7 @@ on:
         required: false
       other-tags:
         description: "Other tags (e.g., smoke, login, regression)"
-        required: false
-      background:
-        description: "Additional background context"
-        required: false
-      pre-requisite:
-        description: "Pre-requisite for the scenarios"
-        required: false
+        required: false  
 
 jobs:
   generate:
@@ -57,5 +61,4 @@ jobs:
             --file-name "${{ github.event.inputs.file-name }}" \
             --tag "${{ github.event.inputs.tag }}" \
             --other-tags "${{ github.event.inputs.other-tags }}" \
-            --background "${{ github.event.inputs.background }}" \
-            --pre-requisite "${{ github.event.inputs.pre-requisite }}"
+            --additional-background "${{ github.event.inputs.additional-background }}"
