@@ -18,6 +18,12 @@ on:
       other-tags:
         description: "Other tags (e.g., smoke, login, regression)"
         required: false
+      background:
+        description: "Context or shared background (e.g., user is logged in, food items in cart)"
+        required: false
+      pre-requisite:
+        description: "Pre-requisites or setup steps before test scenarios (e.g., user account exists)"
+        required: false
 
 jobs:
   generate:
@@ -50,4 +56,6 @@ jobs:
             --squad "${{ github.event.inputs.squad }}" \
             --file-name "${{ github.event.inputs.file-name }}" \
             --tag "${{ github.event.inputs.tag }}" \
-            --other-tags "${{ github.event.inputs.other-tags }}"
+            --other-tags "${{ github.event.inputs.other-tags }}" \
+            --background "${{ github.event.inputs.background }}" \
+            --pre-requisite "${{ github.event.inputs.pre-requisite }}"
