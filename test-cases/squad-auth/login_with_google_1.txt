@@ -1,0 +1,47 @@
+@P0 @smoke @login
+
+Feature: Google Login
+
+  Background:
+    Given The user has a registered Google account on the Talabat app
+
+  Scenario: Successful Google Login
+
+    Given The user is on the login screen
+    When The user taps on the "Continue with Google" button
+    And The user selects their registered Google account from the account chooser
+    Then The user is successfully logged in to the app
+    And The user is redirected to the home screen
+
+  Scenario: Google Login - User Cancels Account Selection
+
+    Given The user is on the login screen
+    When The user taps on the "Continue with Google" button
+    And The user dismisses the account chooser without selecting an account
+    Then The user remains on the login screen
+    And An appropriate error message is displayed indicating the login was cancelled
+
+  Scenario: Google Login - Google Authentication Fails
+
+    Given The user is on the login screen
+    When The user taps on the "Continue with Google" button
+    And The Google authentication process fails (e.g., network error, revoked permissions)
+    Then The user remains on the login screen
+    And An appropriate error message is displayed indicating the Google login failed
+    And The error message includes details about the failure (e.g., "Network error", "Permission denied")
+
+  Scenario: Google Login - Account Not Registered
+
+    Given The user is on the login screen
+    When The user taps on the "Continue with Google" button
+    And The user selects a Google account that is not registered on the app
+    Then The user is prompted to create a new account using the selected Google account
+    And The user is redirected to the registration flow with pre-filled information (e.g., name, email) from their Google account
+
+  Scenario: Google Login - Verify User Information
+
+    Given The user is on the login screen
+    When The user taps on the "Continue with Google" button
+    And The user selects their registered Google account from the account chooser
+    Then The user's profile information (e.g., name, email) is correctly displayed in the app
+    And The user's profile picture from Google is displayed in the app
