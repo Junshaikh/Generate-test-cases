@@ -41,13 +41,13 @@ def generate_test_cases(requirement, squad, custom_filename=None, skip_upload=Fa
 
     model = genai.GenerativeModel("gemini-2.0-flash")
 
-    prompt = f"Generate functional software test cases in clean Gherkin format.\n"
+    prompt = f"You're a QA engineer. Generate functional software test cases in clean Gherkin format."
     if background:
-        prompt += f"\nBackground:\n{background.strip()}"
+        prompt += f"\n\nInclude this in the Gherkin `Background:` section:\n- {background.strip()}"
     if additional_background:
-        prompt += f"\n\nAdditional Background:\n{additional_background.strip()}"
-    prompt += f"\n\nRequirement:\n{requirement.strip()}\n\n"
-    prompt += "Only return clean Gherkin. No markdown formatting, no Scenario labels like 'Scenario 1', etc."
+        prompt += f"\nAlso include these as additional lines in the `Background:`:\n- {additional_background.strip()}"
+    prompt += f"\n\nThe requirement is:\n{requirement.strip()}"
+    prompt += "\n\nOnly return clean Gherkin output. Do not include markdown formatting (like ```gherkin) or scenario labels like 'Scenario 1'. Just valid Gherkin."
 
     response = model.generate_content(prompt)
     test_cases_raw = response.text
