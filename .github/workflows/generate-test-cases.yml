@@ -19,10 +19,10 @@ on:
         description: "Other tags (e.g., smoke, login, regression)"
         required: false
       background:
-        description: "Context or shared background (e.g., user is logged in, food items in cart)"
+        description: "Additional background context"
         required: false
       pre-requisite:
-        description: "Pre-requisites or setup steps before test scenarios (e.g., user account exists)"
+        description: "Pre-requisite for the scenarios"
         required: false
 
 jobs:
