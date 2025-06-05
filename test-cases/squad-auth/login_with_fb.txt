@@ -1,0 +1,54 @@
+@P0 @login @smoke @regression @U&L
+
+Feature: Facebook Login Functionality
+
+  Background:
+    Given User is logged into Talabat food application
+    And Food application is running
+
+  Scenario: Successful Facebook Login
+    Given User is on the Login Screen
+    When User clicks on "Login with Facebook" button
+    And User enters valid Facebook credentials
+    And User grants necessary permissions to Talabat
+    Then User is successfully logged into Talabat
+    And User is redirected to the Home Screen
+    And User sees a welcome message with their Facebook name
+
+  Scenario: Unsuccessful Facebook Login - Invalid Credentials
+    Given User is on the Login Screen
+    When User clicks on "Login with Facebook" button
+    And User enters invalid Facebook credentials
+    Then User sees an error message related to invalid Facebook credentials
+    And User remains on the Login Screen
+
+  Scenario: Unsuccessful Facebook Login - User Cancels Permission
+    Given User is on the Login Screen
+    When User clicks on "Login with Facebook" button
+    And User cancels the permission request from Facebook
+    Then User sees an error message related to permission denial
+    And User remains on the Login Screen
+
+  Scenario: Facebook Login - Existing Talabat Account
+    Given User is on the Login Screen
+    When User clicks on "Login with Facebook" button
+    And User enters Facebook credentials associated with an existing Talabat account
+    Then User is successfully logged into Talabat
+    And User is redirected to the Home Screen
+    And User sees all their existing Talabat data and preferences
+
+  Scenario: Facebook Login - First Time User
+    Given User is on the Login Screen
+    When User clicks on "Login with Facebook" button
+    And User enters Facebook credentials for a new user
+    Then User is prompted to provide additional information like delivery address (if needed)
+    And User is successfully logged into Talabat
+    And User is redirected to the Home Screen
+    And A new Talabat account is created and linked to the Facebook account
+
+  Scenario: Facebook Login - Network Error
+    Given User is on the Login Screen
+    When User clicks on "Login with Facebook" button
+    And There is a network error during Facebook authentication
+    Then User sees an error message related to network connectivity
+    And User remains on the Login Screen
