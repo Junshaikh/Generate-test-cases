@@ -5,10 +5,8 @@ import requests
 import base64
 import argparse
 from dotenv import load_dotenv
-
 load_dotenv()
 
-# Load Gemini API key from environment
 genai.configure(api_key=os.getenv("GOOGLE_API_KEY"))
 
 def clean_gherkin_output(text):
@@ -38,34 +36,29 @@ def generate_test_cases(requirement, squad, custom_filename=None, skip_upload=Fa
     base_filename = sanitize_filename(custom_filename) if custom_filename else suggested_filename
     folder_path = f"test-cases/{squad}"
     os.makedirs(folder_path, exist_ok=True)
-
     final_filename = get_unique_filename(folder_path, base_filename)
     local_path = os.path.join(folder_path, final_filename)
 
     model = genai.GenerativeModel("gemini-2.0-flash")
 
-    # Build enhanced prompt
-    prompt = f"""Generate functional software test cases in clean Gherkin format for a food delivery application.
+    prompt = f"""Generate functional software test cases in clean Gherkin format for a food delivery app.
 
-    Background:
-    Talabat food application
-
-Requirement:
-{requirement}
-
+Background:
+Talabat food application
 """
     if background:
-        prompt += f"Additional Background:\n{background}\n\n"
-    if pre_requisite:
-        prompt += f"Pre-requisite:\n{pre_requisite}\n\n"
+        prompt += f"Additional Background:\n{background}\n"
 
-    prompt += "Only output clean Gherkin. Do not include markdown or labels like `Scenario 1` or ```gherkin."
+    if pre_requisite:
+        prompt += f"\nPre-requisites:\n{pre_requisite}"
+
+    prompt += f"\n\nRequirement:\n{requirement}\n\n"
+    prompt += "Ensure clean Gherkin format. Do not include 'Scenario 1/2' or markdown (like ```gherkin)."
 
     response = model.generate_content(prompt)
     test_cases_raw = response.text
     test_cases = clean_gherkin_output(test_cases_raw)
 
-    # Build tag line
     tags_line = []
     if tag:
         tags_line.append(f"@{tag}")
@@ -128,13 +121,13 @@ def upload_to_github(content, file_name, squad, tag=None, other_tags=None):
 
 def main():
     parser = argparse.ArgumentParser(description="Generate Gherkin test cases from a requirement.")
-    parser.add_argument("--requirement", "-r", help="Requirement description", default=os.getenv("REQUIREMENT"))
-    parser.add_argument("--squad", "-s", help="Squad name (e.g., squad-auth)", default=os.getenv("SQUAD"))
-    parser.add_argument("--file-name", "-f", help="Custom file name", default=os.getenv("FILE_NAME"))
-    parser.add_argument("--tag", "-t", help="Priority tag (e.g., P0, P1)", default=os.getenv("TAG"))
-    parser.add_argument("--other-tags", help="Other tags (e.g., smoke, login)", default=os.getenv("OTHER_TAGS"))
-    parser.add_argument("--background", help="Background context (e.g., user is logged in)", default=os.getenv("BACKGROUND"))
-    parser.add_argument("--pre-requisite", help="Pre-requisite steps before scenarios", default=os.getenv("PRE_REQUISITE"))
+    parser.add_argument("--requirement", "-r", default=os.getenv("REQUIREMENT"))
+    parser.add_argument("--squad", "-s", default=os.getenv("SQUAD"))
+    parser.add_argument("--file-name", "-f", default=os.getenv("FILE_NAME"))
+    parser.add_argument("--tag", "-t", default=os.getenv("TAG"))
+    parser.add_argument("--other-tags", default=os.getenv("OTHER_TAGS"))
+    parser.add_argument("--background", default=os.getenv("BACKGROUND"))
+    parser.add_argument("--pre-requisite", default=os.getenv("PRE_REQUISITE"))
     parser.add_argument("--no-upload", action="store_true", default=os.getenv("NO_UPLOAD") == "true")
 
     args = parser.parse_args()
@@ -146,7 +139,7 @@ def main():
         args.tag,
         args.other_tags,
         args.background,
-        args.pre_requisite,
+        args.pre_requisite
     )
 
 if __name__ == "__main__":
