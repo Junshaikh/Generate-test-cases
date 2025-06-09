@@ -1,0 +1,50 @@
+@P1 @smoke @login
+
+Feature: DineOut Vendor Map Navigation
+
+  Background:
+    Given I am a logged in Talabat user with a Pro subscription
+    And I am on the DineOut section of the Talabat app
+
+  Scenario: Open the Map from the DineOut Vendor Listing and view vendor markers
+    Given I am on the DineOut vendor listing screen
+    When I tap the Map floating button
+    Then I should see the map view
+    And I should see vendor locations as markers on the map
+
+  Scenario: Tap a Vendor Marker and view the Vendor Info Card
+    Given I am viewing the DineOut vendor map
+    When I tap on a vendor marker
+    Then I should see the vendor info card
+    And the card should display the vendor's name
+    And the card should display the vendor's rating
+    And the card should display the vendor's cuisine type
+    And the card should display the vendor's approximate price range
+
+  Scenario: Navigate to Vendor Details Screen from the Vendor Info Card
+    Given I am viewing the vendor info card on the DineOut vendor map
+    When I tap on the vendor info card
+    Then I should be navigated to the full vendor details screen
+    And the vendor details screen should display the vendor's full menu
+    And the vendor details screen should display the vendor's address
+    And the vendor details screen should display the vendor's opening hours
+    And the vendor details screen should allow me to book a table
+
+  Scenario: Verify Map Functionality after returning from Vendor details screen
+    Given I am viewing the vendor info card on the DineOut vendor map
+    When I tap on the vendor info card
+    Then I should be navigated to the full vendor details screen
+    When I navigate back to the DineOut vendor map
+    Then I should still see the vendor markers on the map
+    And I should be able to tap another vendor marker
+
+  Scenario: Verify Map marker displays correct restaurant info
+    Given I am on the DineOut vendor listing screen
+    When I tap the Map floating button
+    Then I should see the map view
+    And I should see vendor locations as markers on the map
+    When I tap a specific vendor marker "Mama Mia's Pizza"
+    Then I should see the vendor info card for "Mama Mia's Pizza"
+    And the vendor info card should display the correct rating for "Mama Mia's Pizza"
+    And the vendor info card should display the correct cuisine type for "Mama Mia's Pizza"
+    And the vendor info card should display the correct price range for "Mama Mia's Pizza"
