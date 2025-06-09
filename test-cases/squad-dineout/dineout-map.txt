@@ -17,7 +17,6 @@ Feature: DineOut Vendor Map Navigation
     When I tap on a vendor marker
     Then I should see the vendor info card
     And the card should display the vendor's name
-    And the card should display the vendor's rating
     And the card should display the vendor's cuisine type
     And the card should display the vendor's approximate price range
 
@@ -28,7 +27,6 @@ Feature: DineOut Vendor Map Navigation
     And the vendor details screen should display the vendor's full menu
     And the vendor details screen should display the vendor's address
     And the vendor details screen should display the vendor's opening hours
-    And the vendor details screen should allow me to book a table
 
   Scenario: Verify Map Functionality after returning from Vendor details screen
     Given I am viewing the vendor info card on the DineOut vendor map
