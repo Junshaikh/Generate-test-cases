@@ -1,0 +1,86 @@
+@P0 @smoke @login @regression
+
+Background:
+    Given User is logged in to the Talabat app
+    And User has a Talabat Pro subscription
+    And User is on the Talabat home screen
+
+Feature: Order Dineout Food
+
+    Scenario: Successfully order dineout food for delivery
+        Given User navigates to the "Dineout" section
+        When User searches for a restaurant named "The Italian Place"
+        And User selects "The Italian Place" from the search results
+        And User views the restaurant menu
+        And User adds "Margherita Pizza" to the order
+        And User adds "Pasta Carbonara" to the order with quantity 2
+        And User clicks on "View Cart"
+        Then User should see "Margherita Pizza" and "Pasta Carbonara x2" in the cart
+        When User selects "Delivery" option
+        And User confirms the delivery address
+        And User chooses "Cash on Delivery" as the payment method
+        And User clicks "Place Order"
+        Then User should see "Order Confirmed" message
+        And User should receive an order confirmation notification
+        And User should see the order details in the order history
+
+    Scenario: Unable to order dineout food due to restaurant being closed
+        Given User navigates to the "Dineout" section
+        When User searches for a restaurant named "The Late Night Diner"
+        And User selects "The Late Night Diner" from the search results
+        Then User should see "Restaurant is currently closed" message
+        And User should not be able to add items to cart
+
+    Scenario: Unable to order dineout food due to item unavailability
+        Given User navigates to the "Dineout" section
+        When User searches for a restaurant named "The Burger Joint"
+        And User selects "The Burger Joint" from the search results
+        And User views the restaurant menu
+        When User tries to add "Special Burger" to the order
+        Then User should see "Special Burger is currently unavailable" message
+        And User should not be able to add "Special Burger" to the cart
+
+    Scenario: Verify Dineout pro discount applied
+        Given User navigates to the "Dineout" section
+        When User searches for a restaurant named "The Lebanese Grill"
+        And User selects "The Lebanese Grill" from the search results
+        And User views the restaurant menu
+        And User adds "Hummus" to the order
+        And User clicks on "View Cart"
+        Then User should see "Hummus" in the cart
+        And User should see a "Talabat Pro Discount" applied to the order total
+        When User selects "Delivery" option
+        And User confirms the delivery address
+        And User chooses "Credit Card" as the payment method
+        And User clicks "Place Order"
+        Then User should see "Order Confirmed" message
+        And User should see the correct discounted order total
+
+    Scenario: Cancel Dineout order before restaurant acceptance
+        Given User navigates to the "Dineout" section
+        When User searches for a restaurant named "The Sushi Bar"
+        And User selects "The Sushi Bar" from the search results
+        And User views the restaurant menu
+        And User adds "California Roll" to the order
+        And User clicks on "View Cart"
+        When User selects "Delivery" option
+        And User confirms the delivery address
+        And User chooses "Cash on Delivery" as the payment method
+        And User clicks "Place Order"
+        Then User navigates to the "Order History" screen
+        And User sees the order for "The Sushi Bar" with status "Pending"
+        When User clicks on "Cancel Order"
+        And User confirms the cancellation
+        Then User should see "Order Cancelled Successfully" message
+        And User should see the order status updated to "Cancelled" in the order history
+
+    Scenario: Verify Dineout order options (Delivery and Pickup)
+        Given User navigates to the "Dineout" section
+        When User searches for a restaurant named "The Indian Curry House"
+        And User selects "The Indian Curry House" from the search results
+        And User views the restaurant menu
+        And User adds "Chicken Tikka Masala" to the order
+        And User clicks on "View Cart"
+        Then User should see "Chicken Tikka Masala" in the cart
+        When User is on the checkout page
+        Then User should see both "Delivery" and "Pickup" options available
