@@ -69,6 +69,7 @@ def generate_test_cases(requirement, squad, custom_filename=None, skip_upload=Fa
         "- Include a `Background:` section before scenarios.\n"
         "- Test scenarios should focus on the Talabat app (ordering food, grocery, pharmcay, dineout, talabat mart, stores, payments, delivery, etc).\n"
         "- Test scenarios for food order is tapping food icon from homescreen, it will navigate to food vendor list, user can search food or items, user can filter by cuisines, filter by ratings, sort by, can make vendor favourites by clicking on heart icon, can see vendor details likve vendor name ratings delivery time and delivery fee on vendor card, on the top vendor list there is vendor collection like 'super saver' and on clicking that icon it will list all the food vendor list part of that collection .\n"
+        "- Test scenarios for Dineout order, it is only in UAE country,  is tapping DineOut icon from homescreen, it will navigate to the dineout restaurants list, upon clicking restaurant card it will open up the to see the location and call option and menu and amenities, photo gallery and Pay bill option, when user clicks on pay billthen user can input the bill amount and can click on Unlock discount, after that user navigates to the checkout page where user have option to pay by new card and saved card and talabat credit and postpaid but not with cash .\n"
     )
 
     response = model.generate_content(prompt)
