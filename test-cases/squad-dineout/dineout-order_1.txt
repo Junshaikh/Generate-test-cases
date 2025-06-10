@@ -1,0 +1,78 @@
+@P0
+
+Feature: Dineout Functionality in Dubai Business Bay
+
+  Background:
+    Given User is logged in with a Pro subscription
+    And User is in the Talabat application
+
+  Scenario: Navigate to Dineout Restaurants List in Dubai Business Bay
+    Given User is on the Talabat home screen
+    When User taps on the "Dineout" icon
+    Then User should be navigated to the Dineout restaurants list
+    And User should see Dineout restaurants in Dubai Business Bay location
+
+  Scenario: View Restaurant Details from Dineout List
+    Given User is on the Dineout restaurants list in Dubai Business Bay
+    When User taps on a restaurant card
+    Then User should see the restaurant details screen
+    And User should see the restaurant's location
+    And User should see the restaurant's call option
+    And User should see the restaurant's menu
+    And User should see the restaurant's amenities
+    And User should see the restaurant's photo gallery
+    And User should see the "Pay Bill" option
+
+  Scenario: Initiate Pay Bill Process and Unlock Discount
+    Given User is viewing the details of a restaurant in Dubai Business Bay
+    When User taps on the "Pay Bill" option
+    Then User should be prompted to input the bill amount
+    When User enters "100" as the bill amount
+    And User taps on "Unlock discount"
+    Then User should see the available discount for the restaurant
+
+  Scenario: Checkout with Saved Card for Dineout Bill
+    Given User has unlocked a discount for a Dineout bill
+    When User navigates to the checkout page
+    Then User should see the available payment options
+    And User should see the option to pay with a saved card
+    When User selects a saved card
+    And User confirms the payment
+    Then User should see a successful payment message
+
+  Scenario: Checkout with New Card for Dineout Bill
+    Given User has unlocked a discount for a Dineout bill
+    When User navigates to the checkout page
+    Then User should see the available payment options
+    And User should see the option to pay with a new card
+    When User selects to pay with a new card
+    And User enters the new card details
+    And User confirms the payment
+    Then User should see a successful payment message
+
+  Scenario: Checkout with Talabat Credit for Dineout Bill
+    Given User has unlocked a discount for a Dineout bill
+    When User navigates to the checkout page
+    Then User should see the available payment options
+    And User should see the option to pay with Talabat Credit
+    When User selects to pay with Talabat Credit
+    And User confirms the payment
+    Then User should see a successful payment message
+
+  Scenario: Checkout with Postpaid for Dineout Bill
+    Given User has unlocked a discount for a Dineout bill
+    When User navigates to the checkout page
+    Then User should see the available payment options
+    And User should see the option to pay with Postpaid
+    When User selects to pay with Postpaid
+    And User confirms the payment
+    Then User should see a successful payment message
+
+  Scenario: Verify Cash Payment is Unavailable
+    Given User has unlocked a discount for a Dineout bill
+    When User navigates to the checkout page
+    Then User should NOT see the option to pay with cash
+
+  Scenario: Verify Dineout Icon is visible in UAE region only
+    Given User is on the Talabat home screen
+    Then the "Dineout" icon should be visible only when the user's location is set to UAE
