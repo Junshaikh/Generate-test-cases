@@ -44,7 +44,7 @@ def generate_test_cases(requirement, squad, custom_filename=None, skip_upload=Fa
 
     # Construct prompt
     prompt = (
-        f"You are a QA engineer for Talabat, a food delivery application like DoorDash or Uber Eats or Noon or Careem.\n"
+        f"You are a QA engineer for Talabat, a food delivery application.\n"
         f"Generate Gherkin-style functional test cases based on the following requirement:\n\n"
         f"{requirement.strip()}\n\n"
     )
@@ -67,7 +67,8 @@ def generate_test_cases(requirement, squad, custom_filename=None, skip_upload=Fa
         "\n\nImportant:\n"
         "- Only return valid clean Gherkin syntax (no markdown, no ```gherkin).\n"
         "- Include a `Background:` section before scenarios.\n"
-        "- Test scenarios should focus on the Talabat app (ordering food, grocery, medicine, dineout, talabat mart quick delivery, pickup food, payments, delivery, etc).\n"
+        "- Test scenarios should focus on the Talabat app (ordering food, grocery, pharmcay, dineout, talabat mart, stores, payments, delivery, etc).\n"
+        "- Test scenarios for food order is tapping food icon from homescreen, it will navigate to food vendor list, user can search food or items, user can filter by cuisines, filter by ratings, sort by, can make vendor favourites by clicking on heart icon, can see vendor details likve vendor name ratings delivery time and delivery fee on vendor card, on the top vendor list there is vendor collection like 'super saver' and on clicking that icon it will list all the food vendor list part of that collection .\n"
     )
 
     response = model.generate_content(prompt)
