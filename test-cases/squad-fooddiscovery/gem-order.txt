@@ -1,0 +1,67 @@
+@P0 @smoke @login @regression
+
+Feature: Order from GEM restaurant
+
+  Background:
+    Given I am a not logged-in user
+    And I am on the Talabat home screen
+
+  Scenario: Find GEM restaurant via Home Screen swim-lane
+    When I scroll to the "GEM restaurants" swim-lane
+    And I tap on a restaurant card in the "GEM restaurants" swim-lane
+    Then I should be navigated to the restaurant's menu page
+
+  Scenario: Find GEM restaurant via Search
+    When I tap on the search bar
+    And I enter "gem" in the search field
+    And I tap on a GEM restaurant suggestion from the search results
+    Then I should be navigated to the restaurant's menu page
+
+  Scenario: Verify GEM discount timer and tiers on menu page
+    Given I am on a GEM restaurant's menu page
+    Then I should see the GEM timer running
+    And I should see the three tier discount amounts displayed
+
+  Scenario: Add items to cart and reach GEM discount tiers
+    Given I am on a GEM restaurant's menu page
+    When I add items to my cart until I reach the first GEM discount tier
+    Then I should see the first tier discount applied in the cart
+
+  Scenario: Verify GEM discount on Cart Screen
+    Given I have added items to my cart from a GEM restaurant to reach a discount tier
+    When I view my cart
+    Then I should see the GEM discount amount displayed in the payment summary
+
+  Scenario: Verify GEM discount on Checkout Screen
+    Given I have added items to my cart from a GEM restaurant to reach a discount tier
+    And I am on the checkout screen
+    Then I should see the GEM discount amount displayed in the payment summary
+
+  Scenario: Attempt to order from GEM restaurant without reaching discount tier
+    Given I am on a GEM restaurant's menu page
+    When I add items to my cart but do not reach any GEM discount tier
+    And I proceed to the checkout screen
+    Then I should not see any GEM discount applied in the payment summary
+
+  Scenario: Complete order from GEM restaurant with discount
+    Given I have added items to my cart from a GEM restaurant to reach a discount tier
+    And I am on the checkout screen
+    When I select a payment method
+    And I place the order
+    Then I should see a confirmation message that my order has been placed
+    And the order details should include the GEM discount
+
+  Scenario: Find GEM restaurants Collection
+    When I tap on 'Food' icon from homescreen
+    And I scroll to the "Vendor Collection" swim-lane
+    And I tap on the "GEM" collection
+    Then I should be navigated to the GEM vendor list
+    And I should see the Gem Timer running
+
+  Scenario: Filter the GEM Restaurants list
+    When I tap on 'Food' icon from homescreen
+    And I scroll to the "Vendor Collection" swim-lane
+    And I tap on the "GEM" collection
+    And I select "Cuisine" filter
+    And I choose "Italian" cuisine
+    Then I should only see GEM restaurants that offer Italian cuisine
