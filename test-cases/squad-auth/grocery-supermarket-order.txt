@@ -1,0 +1,31 @@
+@P0 @smoke @login
+
+Feature: Grocery Order with Apple Pay and Free Delivery
+
+Background:
+    Given I am a logged-in user with a Talabat Pro subscription
+    And I am on the Talabat home screen
+
+Scenario: Order grocery from a supermarket, reach free delivery threshold, and pay with Apple Pay
+    When I tap on the "Grocery" icon
+    Then I should be navigated to the grocery vendor list screen
+
+    When I tap on a supermarket from the list of supermarkets
+    Then I should be navigated to the grocery catalog screen for that supermarket
+
+    When I add multiple items to my cart to reach the free delivery discount threshold
+    Then the "View cart" button should be enabled
+
+    When I tap on the "View cart" button
+    Then I should be navigated to the Cart screen
+
+    And the Payment summary should display the "Free delivery" tag due to Talabat Pro subscription and reaching the threshold
+
+    When I tap on "Proceed to checkout"
+    Then I should be navigated to the checkout screen
+
+    And the checkout screen should display the option to pay with Apple Pay
+    When I select Apple Pay as my payment method
+    And I confirm the order
+    Then the order should be successfully placed
+    And I should receive an order confirmation notification
