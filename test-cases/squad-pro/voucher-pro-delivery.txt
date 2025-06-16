@@ -1,0 +1,83 @@
+@P1 @new
+
+Feature: Claim Voucher for Late Delivery
+
+  Background:
+    Given I am a logged-in user with a Pro subscription in UAE
+
+  Scenario: Successfully claim 20 AED voucher after exceeding delivery time for Food order
+    Given I have placed a food order
+    And the estimated delivery time was "30 minutes"
+    When the actual delivery time exceeds "30 minutes"
+    Then I should see a notification that I am eligible for a 20 AED voucher
+    And I should be able to claim the 20 AED voucher
+    And the voucher should be added to my Talabat Pay wallet
+
+  Scenario: Successfully claim 20 AED voucher after exceeding delivery time for Grocery order
+    Given I have placed a grocery order
+    And the estimated delivery time was "45 minutes"
+    When the actual delivery time exceeds "45 minutes"
+    Then I should see a notification that I am eligible for a 20 AED voucher
+    And I should be able to claim the 20 AED voucher
+    And the voucher should be added to my Talabat Pay wallet
+
+  Scenario: Successfully claim 20 AED voucher after exceeding delivery time for Pharmacy order
+    Given I have placed a pharmacy order
+    And the estimated delivery time was "60 minutes"
+    When the actual delivery time exceeds "60 minutes"
+    Then I should see a notification that I am eligible for a 20 AED voucher
+    And I should be able to claim the 20 AED voucher
+    And the voucher should be added to my Talabat Pay wallet
+
+  Scenario: Successfully claim 20 AED voucher after exceeding delivery time for Stores order
+    Given I have placed a Stores order
+    And the estimated delivery time was "35 minutes"
+    When the actual delivery time exceeds "35 minutes"
+    Then I should see a notification that I am eligible for a 20 AED voucher
+    And I should be able to claim the 20 AED voucher
+    And the voucher should be added to my Talabat Pay wallet
+
+  Scenario: Do not offer voucher if delivery time is within the estimated time
+    Given I have placed a food order
+    And the estimated delivery time was "30 minutes"
+    When the actual delivery time is "25 minutes"
+    Then I should not see a notification about a voucher for late delivery
+
+  Scenario: Do not offer voucher to non-Pro users
+    Given I am a logged-in user without a Pro subscription in UAE
+    And I have placed a food order
+    And the estimated delivery time was "30 minutes"
+    When the actual delivery time exceeds "30 minutes"
+    Then I should not see a notification about a voucher for late delivery
+
+  Scenario: Claim voucher only once for a single order
+    Given I have placed a food order
+    And the estimated delivery time was "30 minutes"
+    When the actual delivery time exceeds "30 minutes"
+    Then I should see a notification that I am eligible for a 20 AED voucher
+    And I should be able to claim the 20 AED voucher
+    And I should not be able to claim the voucher again for the same order
+
+  Scenario: Voucher is only available in UAE
+    Given I am a logged-in user with a Pro subscription in Kuwait
+    And I have placed a food order
+    And the estimated delivery time was "30 minutes"
+    When the actual delivery time exceeds "30 minutes"
+    Then I should not see a notification about a voucher for late delivery
+
+  Scenario: Validate voucher balance in Talabat Pay wallet after claiming voucher
+    Given I have placed a food order
+    And the estimated delivery time was "30 minutes"
+    When the actual delivery time exceeds "30 minutes"
+    Then I should see a notification that I am eligible for a 20 AED voucher
+    And I should be able to claim the 20 AED voucher
+    And my Talabat Pay wallet balance should increase by 20 AED
+
+  Scenario: Voucher available to apply to next food order
+    Given I have placed a food order
+    And the estimated delivery time was "30 minutes"
+    When the actual delivery time exceeds "30 minutes"
+    Then I should see a notification that I am eligible for a 20 AED voucher
+    And I should be able to claim the 20 AED voucher
+    And when I place the next food order
+    Then I should see the 20 AED voucher available to apply at the cart screen
