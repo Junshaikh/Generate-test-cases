@@ -97,14 +97,6 @@ def generate_test_cases(requirement, squad, custom_filename=None, skip_upload=Fa
         "- Consideration for Change Language on Settings screen, user when click on the ‘Language’ should open the bottom sheet to select the languages like English and Arabic, Emariti will also be seen in UAE, Kurdish will also be seen in Iraq  .\n"
         "- Consideration for Change Country on Settings screen, user when click on the ‘Country’ should open the bottom sheet to select the country like Kuwait KSA Bahrain UAE Oman Qatar Jordan Egypt Iraq  .\n"
         "- Consideration for Logout on Settings screen, user when click on the ‘Log out’ should open the popup with display ‘Are you sure you want to logout? with two button option ‘Cancel’ and ‘Log out’  .\n"
-        input_text = """
-        - Consideration for Saved Addresses info on Settings screen, user see all the saved addresses in case any address saved before if not then it will be empty.
-        - User will see the option to ‘Add’ the address, on clicking ‘Add’ map will appear and user can type the location name and tap enter. 
-        - After this user can click on the button ‘Enter complete address’ and on clicking it should display map view on the top of the area selected with Area name and option to save the address as ‘Apartment’ ‘House’ ‘Office’.
-        - When selected ‘Apartment’ user has the mandatory fields to enter ‘Building name’ ‘Apt no’ ‘Floor’ ‘Street’ ‘Phone number beside the country flag dropdown and country code’ and optional fields to fill are Additional directions and Address label.
-        - When selected ‘House’ user has the mandatory fields to enter ‘House’ ‘Street’ ‘Phone number beside the country flag dropdown and country code’ and optional fields to fill are ‘Floor’ ‘Additional directions’ and ‘Address label’.
-        - When selected ‘Office’ user has the mandatory fields to enter ‘Building name’ ‘Company’ ‘Floor’ ‘Street’ ‘Phone number beside the country flag dropdown and country code’ and optional fields to fill are ‘Additional directions’ and ‘Address label’,  After entering the fields user have to click on ‘Save address’.
-        """
     )
 
     response = model.generate_content(prompt)
