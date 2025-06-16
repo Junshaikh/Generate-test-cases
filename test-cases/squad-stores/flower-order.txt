@@ -1,0 +1,95 @@
+@P1 @smoke @regression
+
+Feature: Ordering Flowers from Stores
+
+  Background:
+    Given User is logged in with a pro subscription
+    And User is on the Home Screen
+
+  Scenario: Navigate to Stores and browse flower category
+    When User taps on the "Stores" icon on the Home Screen
+    Then User should be navigated to the Stores list screen
+    And User should see a search bar
+    And User should see different store categories, including "Flowers"
+    When User taps on "Flowers" category
+    Then User should see a list of flower stores
+
+  Scenario: Add flowers to cart from a store
+    When User taps on the "Stores" icon on the Home Screen
+    And User is navigated to the Stores list screen
+    And User taps on a flower store
+    Then User should be navigated to the store's item list
+    When User taps on the "+" icon next to a flower item to add it to the cart
+    Then The flower item should be added to the cart
+    And The "View cart" button should be enabled
+
+  Scenario: View cart and proceed to checkout with flowers
+    When User taps on the "Stores" icon on the Home Screen
+    And User is navigated to the Stores list screen
+    And User taps on a flower store
+    And User adds a flower item to the cart
+    When User taps on the "View cart" button
+    Then User should be navigated to the Cart screen
+    And User should see the added flower item in the cart with its price
+    When User taps on the "Proceed to checkout" button
+    Then User should be navigated to the Checkout screen
+
+  Scenario: Complete flower order with existing address and saved card
+    When User taps on the "Stores" icon on the Home Screen
+    And User is navigated to the Stores list screen
+    And User taps on a flower store
+    And User adds a flower item to the cart
+    And User taps on the "View cart" button
+    And User taps on the "Proceed to checkout" button
+    Then User should see their saved address on the Checkout screen
+    And User should see estimated delivery time
+    And User should see their saved card as a payment option
+    When User selects the saved card payment option
+    And User confirms the order
+    Then User should see the order confirmation screen
+    And User should receive an order confirmation notification
+
+  Scenario: Attempt to order flowers from store without pro benefits being applied
+    When User taps on the "Stores" icon on the Home Screen
+    And User is navigated to the Stores list screen
+    And User taps on a flower store
+    And User adds a flower item to the cart
+    And User taps on the "View cart" button
+    Then User should be navigated to the Cart screen
+    And User should see the added flower item in the cart with its price
+    And User verifies the "Free delivery with pro tag" is displayed if the order qualifies
+    When User taps on the "Proceed to checkout" button
+    Then User is navigated to the Checkout screen
+    And User verifies the "Free delivery with pro tag" is displayed on the payment summary if the order qualifies
+    And User selects "Talabat Credit Wallet" as a payment method
+    And User confirms the order
+    Then User should see the order confirmation screen
+    And User should receive an order confirmation notification
+
+  Scenario: Search for a specific type of flower in Stores
+    When User taps on the "Stores" icon on the Home Screen
+    And User is navigated to the Stores list screen
+    When User enters "Rose" in the search bar
+    Then User should see a list of flower stores and items that contain "Rose"
+
+  Scenario: Verify minimum order amount before checkout
+    When User taps on the "Stores" icon on the Home Screen
+    And User is navigated to the Stores list screen
+    And User taps on a flower store
+    Then User should be navigated to the store's item list
+    And User adds a flower item to the cart
+    When the cart total is below the minimum order amount
+    Then the "Proceed to checkout" button should be disabled
+    And a message indicating the minimum order amount should be displayed
+
+  Scenario: Edit the quantity of a flower item in the cart
+    When User taps on the "Stores" icon on the Home Screen
+    And User is navigated to the Stores list screen
+    And User taps on a flower store
+    And User adds a flower item to the cart
+    When User taps on the "View cart" button
+    Then User should be navigated to the Cart screen
+    And User taps on the "Edit" option next to the flower item
+    And User increases the quantity of the flower item
+    Then The cart total should be updated accordingly
+    And The "Proceed to checkout" button is enabled
