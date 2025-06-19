@@ -6,6 +6,25 @@ on:
       requirement:
         description: "Requirement description"
         required: true
+      tribe:
+        description: "Tribe name"
+        required: true
+        type: choice
+        options:
+          - Shopping
+          - Growth
+          - Q-Commerce
+          - Fintech
+          - Lifecycle
+      squad:
+        description: "Squad name"
+        required: true
+        type: choice
+        options:
+          - Home
+          - User&Location
+          - Food-Discovery
+          - Food-Finding
       background:
         description: "Primary background context (e.g., Talabat food mobile application)"
         required: true
@@ -13,9 +32,6 @@ on:
       additional-background:
         description: "Additional context (e.g., logged in user, pro subscribed user)"
         required: false
-      squad:
-        description: "Squad name (e.g., squad-auth)"
-        required: true
       file-name:
         description: "Test file name (e.g., login-with-email)"
         required: false
@@ -24,7 +40,7 @@ on:
         required: false
       other-tags:
         description: "Other tags (e.g., smoke, login, regression)"
-        required: false  
+        required: false
 
 jobs:
   generate:
@@ -58,4 +74,5 @@ jobs:
             --file-name "${{ github.event.inputs.file-name }}" \
             --tag "${{ github.event.inputs.tag }}" \
             --other-tags "${{ github.event.inputs.other-tags }}" \
+            --background "${{ github.event.inputs.background }}" \
             --additional-background "${{ github.event.inputs.additional-background }}"
