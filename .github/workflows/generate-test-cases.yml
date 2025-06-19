@@ -22,9 +22,17 @@ on:
         type: choice
         options:
           - Home
-          - User&Location
+          - User & Location
           - Food-Discovery
           - Food-Finding
+          - Menu experience
+          - Cart and checkout
+          - Tracking & User Support
+          - Pro
+          - Incentives Experience
+          - Incentive core
+          - Adex
+          - 
       background:
         description: "Primary background context (e.g., Talabat food mobile application)"
         required: true
