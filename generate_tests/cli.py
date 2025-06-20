@@ -121,7 +121,7 @@ def generate_test_cases(requirement, tribe, squad, custom_filename=None, skip_up
     print(f"✅ Test cases saved to {local_path}")
 
     if not skip_upload:
-        upload_to_github(test_cases, final_filename, squad, tag, other_tags)
+        upload_to_github(test_cases, final_filename, tribe, squad, tag, other_tags)
     else:
         print("⚠️ Skipping GitHub upload (--no-upload enabled)")
 
