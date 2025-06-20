@@ -11,18 +11,19 @@ on:
         required: true
         type: choice
         options:
-          - select
+          - 🚫 Please select a Tribe
           - Shopping
           - Growth
           - Q-Commerce
           - Fintech
           - Lifecycle
+        default: 🚫 Please select a Tribe
       squad:
         description: "Squad name (select the correct squad)"
         required: true
         type: choice
         options:
-          - select
+          - 🚫 Please select a Squad
           - Home
           - User & Location
           - Food-Discovery
@@ -42,6 +43,7 @@ on:
           - Pay Acceptance
           - tPay
           - Postpaid
+        default: 🚫 Please select a Squad
       background:
         description: "Primary background context (e.g., Talabat food mobile application)"
         required: true
@@ -79,11 +81,11 @@ jobs:
 
       - name: Validate input fields
         run: |
-          if [ "${{ github.event.inputs.tribe }}" = "select" ]; then
+          if [ "${{ github.event.inputs.tribe }}" = "🚫 Please select a Tribe" ]; then
             echo "❌ Tribe name is not selected. Please choose a valid tribe."
             exit 1
           fi
-          if [ "${{ github.event.inputs.squad }}" = "select" ]; then
+          if [ "${{ github.event.inputs.squad }}" = "🚫 Please select a Squad" ]; then
             echo "❌ Squad name is not selected. Please choose a valid squad."
             exit 1
           fi
