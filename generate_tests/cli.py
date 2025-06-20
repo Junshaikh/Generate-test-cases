@@ -175,7 +175,7 @@ def main():
     parser.add_argument("--background", help="Primary background context", default=os.getenv("BACKGROUND"))
     parser.add_argument("--additional-background", help="Extra background info (e.g., logged-in user)", default=os.getenv("ADDITIONAL_BACKGROUND"))
     parser.add_argument("--no-upload", action="store_true", default=os.getenv("NO_UPLOAD") == "true")
-    parser.add_argument("--tribe", "-t", help="Tribe name (e.g., Fintech)", default=os.getenv("TRIBE"))
+    parser.add_argument("--tribe", help="Tribe name (e.g., Fintech)", default=os.getenv("TRIBE"))
 
     args = parser.parse_args()
     generate_test_cases(
