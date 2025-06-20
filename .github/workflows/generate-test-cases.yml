@@ -85,6 +85,7 @@ jobs:
         run: |
           generate-tests \
             --requirement "${{ github.event.inputs.requirement }}" \
+            --tribe "${{ github.event.inputs.tribe }}" \
             --squad "${{ github.event.inputs.squad }}" \
             --file-name "${{ github.event.inputs.file-name }}" \
             --tag "${{ github.event.inputs.tag }}" \
