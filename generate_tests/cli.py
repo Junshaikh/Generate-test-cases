@@ -170,7 +170,7 @@ def main():
     parser.add_argument("--requirement", "-r", help="Requirement description", default=os.getenv("REQUIREMENT"))
     parser.add_argument("--squad", "-s", help="Squad name (e.g., squad-auth)", default=os.getenv("SQUAD"))
     parser.add_argument("--file-name", "-f", help="Custom file name", default=os.getenv("FILE_NAME"))
-    parser.add_argument("--tag", "-t", help="Priority tag (e.g., P0, P1)", default=os.getenv("TAG"))
+    parser.add_argument("--tag", help="Priority tag (e.g., P0, P1)", default=os.getenv("TAG"))
     parser.add_argument("--other-tags", help="Other tags (e.g., smoke, login)", default=os.getenv("OTHER_TAGS"))
     parser.add_argument("--background", help="Primary background context", default=os.getenv("BACKGROUND"))
     parser.add_argument("--additional-background", help="Extra background info (e.g., logged-in user)", default=os.getenv("ADDITIONAL_BACKGROUND"))
@@ -178,10 +178,17 @@ def main():
     parser.add_argument("--tribe", help="Tribe name (e.g., Fintech)", default=os.getenv("TRIBE"))
 
     args = parser.parse_args()
-    generate_test_cases(
-        args.requirement, args.squad, args.file_name, args.no_upload,
-        args.tag, args.other_tags, args.background, args.additional_background
-    )
 
+    generate_test_cases(
+        args.requirement,
+        args.tribe,                     # ✅ You were missing this
+        args.squad,
+        args.file_name,
+        args.no_upload,
+        args.tag,
+        args.other_tags,
+        args.background,
+        args.additional_background
+    )
 if __name__ == "__main__":
     main()
