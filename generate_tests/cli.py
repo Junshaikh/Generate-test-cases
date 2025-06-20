@@ -125,11 +125,11 @@ def generate_test_cases(requirement, tribe, squad, custom_filename=None, skip_up
     else:
         print("⚠️ Skipping GitHub upload (--no-upload enabled)")
 
-def upload_to_github(content, file_name, squad, tag=None, other_tags=None):
+def upload_to_github(content, file_name, tribe, squad, tag=None, other_tags=None):
     github_token = os.getenv("GITHUB_TOKEN")
     repo_owner = os.getenv("GITHUB_REPO_OWNER")
     repo_name = os.getenv("GITHUB_REPO_NAME")
-    file_path = f"test-cases/{squad}/{file_name}"
+    file_path = f"test-cases/{tribe}/{squad}/{file_name}"
     branch = os.getenv("GITHUB_BRANCH", "main")
 
     url = f"https://api.github.com/repos/{repo_owner}/{repo_name}/contents/{file_path}"
@@ -150,7 +150,7 @@ def upload_to_github(content, file_name, squad, tag=None, other_tags=None):
             combined_tags.extend([f"`@{t}`" if not t.startswith("@") else f"`{t}`" for t in extra_tags if t])
         tag_msg = "\n\n**Tags**: " + ", ".join(combined_tags)
 
-    message = f"Add test cases for `{file_name}` in `{squad}` squad.{tag_msg}\n\nPreview: {file_url}"
+    message = f"Add test cases for `{file_name}` in `{tribe}/{squad}` path.{tag_msg}\n\nPreview: {file_url}"
     encoded_content = base64.b64encode(content.encode()).decode()
 
     data = {
