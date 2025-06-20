@@ -1,0 +1,60 @@
+@P0 @smoke @regression
+
+Feature: Order Grocery with kNet in Kuwait
+
+Background:
+  Given This is for Talabat food delivery application
+  And User is a logged-in user with pro subscription
+  And User is in Kuwait
+  And User is on the Talabat mobile application Home Screen
+
+Scenario: Navigate to Grocery and select a store
+  When User taps on the "Groceries" entry point on the Home Screen
+  Then User should see the grocery store list screen
+  When User taps on a grocery store from the list
+  Then User should be navigated to the grocery catalog screen
+
+Scenario: Add items to cart and proceed to checkout
+  Given User is on the grocery catalog screen
+  When User adds items to the cart reaching the minimum order amount
+  Then User should see the "View cart" button enabled
+  When User taps on the "View cart" button
+  Then User should be navigated to the grocery cart screen
+  When User taps on the "Proceed to checkout" button
+  Then User should be navigated to the grocery checkout screen
+
+Scenario: Select kNet payment option and place the order
+  Given User is on the grocery checkout screen
+  When User selects "kNet" as the payment method
+  Then User should see the payment summary with the total amount
+  When User confirms the order
+  Then User should be redirected to the kNet payment gateway
+  And User completes the kNet payment process
+  Then User should see the order confirmation screen
+  And User should receive an order confirmation notification
+
+Scenario: Verify successful order placement in Order History
+  Given User has placed an order successfully
+  When User navigates to the "Orders" tab on the Home Screen
+  Then User should see the placed order in the order history with status "Confirmed"
+
+Scenario: Cancel Order
+  Given User is on the grocery checkout screen
+  When User cancels the order
+  Then User should be on the Home Screen
+  And User should receive an order cancellation notification
+
+Scenario: Verify kNet not displayed when outside Kuwait
+  Given User is not in Kuwait
+  When User taps on the "Groceries" entry point on the Home Screen
+  Then User should see the grocery store list screen
+  When User taps on a grocery store from the list
+  Then User should be navigated to the grocery catalog screen
+  Given User is on the grocery catalog screen
+  When User adds items to the cart reaching the minimum order amount
+  Then User should see the "View cart" button enabled
+  When User taps on the "View cart" button
+  Then User should be navigated to the grocery cart screen
+  When User taps on the "Proceed to checkout" button
+  Then User should be navigated to the grocery checkout screen
+  Then User should not see "kNet" as the payment method
