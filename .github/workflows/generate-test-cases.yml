@@ -7,7 +7,7 @@ on:
         description: "Requirement description"
         required: true
       tribe:
-        description: "Tribe name"
+        description: "Tribe name (select the correct tribe)"
         required: true
         type: choice
         options:
@@ -17,7 +17,7 @@ on:
           - Fintech
           - Lifecycle
       squad:
-        description: "Squad name"
+        description: "Squad name (select the correct squad)"
         required: true
         type: choice
         options:
@@ -32,7 +32,14 @@ on:
           - Incentives Experience
           - Incentive core
           - Adex
-          - 
+          - QC affordability
+          - QC Finding And browsing
+          - Grocery Ordering
+          - Grocery Fulfillment
+          - Dineout
+          - Pay Acceptance
+          - tPay
+          - Postpaid
       background:
         description: "Primary background context (e.g., Talabat food mobile application)"
         required: true
