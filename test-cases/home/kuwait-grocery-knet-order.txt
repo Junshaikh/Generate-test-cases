@@ -1,0 +1,33 @@
+@P0 @smoke @regression
+
+Feature: Grocery Order with K-Net Payment in Kuwait
+
+Background:
+  Given This is for Talabat food delivery application
+  And Talabat food mobile application
+  And the user is logged in
+  And the user has a Pro subscription
+
+Scenario: Order grocery from a store and pay with K-Net
+  Given the user is in Kuwait
+  When the user taps on the "Groceries" entry point on the Home Screen
+  Then the user should be navigated to the Grocery vendor list screen
+  When the user taps on a grocery store from the list
+  Then the user should be navigated to the grocery catalog screen
+  When the user adds items to the cart reaching the minimum order amount
+  Then the "View cart" button should be enabled
+  When the user taps on the "View cart" button
+  Then the user should be navigated to the Grocery cart screen
+  When the user taps on "Proceed to checkout"
+  Then the user should be navigated to the Grocery checkout screen
+  And the address is displayed and editable
+  And the estimated delivery time is displayed
+  And the rider tip option is displayed
+  When the user selects "Pay with K-Net"
+  Then the user should see the Payment summary with Subtotal, Delivery fee, Service fee and Total amount and Pro discount if applicable
+  When the user confirms the order
+  Then the user should be redirected to the K-Net payment gateway
+  When the user completes the payment successfully on the K-Net gateway
+  Then the user should be redirected back to the Talabat application
+  Then the user should see an order confirmation message
+  And the order details should be displayed
