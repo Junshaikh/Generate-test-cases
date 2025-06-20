@@ -30,11 +30,12 @@ def get_unique_filename(folder_path, base_filename):
         counter += 1
     return os.path.basename(full_path)
 
-def generate_test_cases(requirement, squad, custom_filename=None, skip_upload=False, tag=None, other_tags=None, background=None, additional_background=None):
+def generate_test_cases(requirement, tribe, squad, custom_filename=None, skip_upload=False, tag=None, other_tags=None, background=None, additional_background=None):
+    tribe = sanitize_filename(tribe)
     squad = sanitize_filename(squad)
     suggested_filename = sanitize_filename(requirement)
     base_filename = sanitize_filename(custom_filename) if custom_filename else suggested_filename
-    folder_path = f"test-cases/{squad}"
+    folder_path = os.path.join("test-cases", tribe, squad)
     os.makedirs(folder_path, exist_ok=True)
 
     final_filename = get_unique_filename(folder_path, base_filename)
@@ -174,6 +175,7 @@ def main():
     parser.add_argument("--background", help="Primary background context", default=os.getenv("BACKGROUND"))
     parser.add_argument("--additional-background", help="Extra background info (e.g., logged-in user)", default=os.getenv("ADDITIONAL_BACKGROUND"))
     parser.add_argument("--no-upload", action="store_true", default=os.getenv("NO_UPLOAD") == "true")
+    parser.add_argument("--tribe", "-t", help="Tribe name (e.g., Fintech)", default=os.getenv("TRIBE"))
 
     args = parser.parse_args()
     generate_test_cases(
