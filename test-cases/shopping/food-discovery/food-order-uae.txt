@@ -1,0 +1,65 @@
+@P0 @smoke @regression
+
+Feature: Place Food Order with Cash in UAE
+
+Background:
+  Given This is for Talabat food delivery application
+  And Talabat food mobile application
+  And The user is logged in
+  And The user has a Pro subscription
+
+Scenario: User successfully places a food order with cash payment
+  Given The user is on the Home Screen
+  When The user taps on the 'Food' entry point
+  And The user selects a restaurant from the food vendor list
+  And The user adds an item to the cart from the menu
+  And The user taps on 'View Cart'
+  And The user proceeds to checkout
+  And The user selects 'Cash' as the payment method
+  Then The user should be able to place the order
+  And The user should see an order confirmation message
+
+Scenario: User cannot place a food order with cash payment if minimum order value is not met
+  Given The user is on the Home Screen
+  When The user taps on the 'Food' entry point
+  And The user selects a restaurant from the food vendor list
+  And The user adds an item to the cart from the menu, but the total is less than the minimum order value
+  And The user taps on 'View Cart'
+  And The user proceeds to checkout
+  Then The user should not be able to select 'Cash' as the payment method
+  And The user should see an error message indicating the minimum order value
+
+Scenario: User checks payment summary details before placing order
+  Given The user is on the Home Screen
+  When The user taps on the 'Food' entry point
+  And The user selects a restaurant from the food vendor list
+  And The user adds an item to the cart from the menu
+  And The user taps on 'View Cart'
+  And The user proceeds to checkout
+  Then The user should see the Payment summary with Subtotal, Delivery fee, Service fee and Total amount and pro discount
+  And The Delivery fee should be free due to Pro subscription
+  And The user should be able to select 'Cash' as the payment method
+
+Scenario: User changes address on the checkout screen before placing an order with cash
+  Given The user is on the Home Screen
+  When The user taps on the 'Food' entry point
+  And The user selects a restaurant from the food vendor list
+  And The user adds an item to the cart from the menu
+  And The user taps on 'View Cart'
+  And The user proceeds to checkout
+  When The user changes the delivery address
+  Then The user should see the updated delivery address on the checkout screen
+  And The user selects 'Cash' as the payment method
+  And The user should be able to place the order
+
+Scenario: User adds a tip for the rider before placing an order with cash
+  Given The user is on the Home Screen
+  When The user taps on the 'Food' entry point
+  And The user selects a restaurant from the food vendor list
+  And The user adds an item to the cart from the menu
+  And The user taps on 'View Cart'
+  And The user proceeds to checkout
+  When The user adds a rider tip
+  Then The user should see the rider tip amount in the Payment summary
+  And The user selects 'Cash' as the payment method
+  And The user should be able to place the order
