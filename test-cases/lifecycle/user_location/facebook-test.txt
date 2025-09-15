@@ -1,0 +1,103 @@
+@p0 @smoke
+
+Feature: Facebook Login
+
+  Background:
+    Given This is for Talabat food delivery application
+    And Talabat food mobile application
+
+  Scenario: Successfully login with Facebook
+    Given I launch the Talabat app
+    When I tap on the "Login with Facebook" button
+    And I enter valid Facebook credentials
+    Then I should be logged in to Talabat
+    And I should see the home screen with verticals entry point 'Food' 'talabat mart' 'Groceries' 'Pharmacies' 'Sweets' 'Dineout' ’Stores’ ‘Giveback’
+    And I should see "Order again" swim-lane
+
+  Scenario: Facebook login with invalid credentials
+    Given I launch the Talabat app
+    When I tap on the "Login with Facebook" button
+    And I enter invalid Facebook credentials
+    Then I should see an error message related to invalid login
+
+  Scenario: Facebook login cancellation by user
+    Given I launch the Talabat app
+    When I tap on the "Login with Facebook" button
+    And I cancel the Facebook login process
+    Then I should remain on the login screen
+
+  Scenario: Facebook login with missing permissions
+    Given I launch the Talabat app
+    When I tap on the "Login with Facebook" button
+    And I grant only basic permissions
+    Then I should be logged in to Talabat
+    #And I should see notification about missing data for personalized experience
+
+  Scenario: Facebook profile changes reflected in Talabat
+    Given I am logged in to Talabat with Facebook
+    When I change my profile picture on Facebook
+    And I relaunch the Talabat app
+    Then My profile picture in Talabat should be updated
+
+  Scenario: Verify Facebook login remembers user selection
+    Given I am logged in to Talabat with Facebook
+    When I logout from the Talabat app
+    And I launch the Talabat app
+    When I tap on the "Login with Facebook" button
+    Then I should be logged in without entering my credentials again
+
+  Scenario: User can order food after Facebook login
+    Given I launch the Talabat app
+    When I tap on the "Login with Facebook" button
+    And I enter valid Facebook credentials
+    Then I should be logged in to Talabat
+    When I tap on 'Food' vertical entry point on home screen
+    And I tap on a restaurant from the food vendor list
+    And I add an item to the cart
+    And I proceed to checkout
+    And I select a payment method
+    Then I should be able to place the order successfully
+
+  Scenario: User can order groceries after Facebook login
+    Given I launch the Talabat app
+    When I tap on the "Login with Facebook" button
+    And I enter valid Facebook credentials
+    Then I should be logged in to Talabat
+    When I tap on 'Groceries' vertical entry point on home screen
+    And I tap on a grocery store
+    And I add an item to the cart
+    And I proceed to checkout
+    And I select a payment method
+    Then I should be able to place the order successfully
+
+  Scenario: User can order pharmacy items after Facebook login
+    Given I launch the Talabat app
+    When I tap on the "Login with Facebook" button
+    And I enter valid Facebook credentials
+    Then I should be logged in to Talabat
+    When I tap on 'Pharmacies' vertical entry point on home screen
+    And I tap on a pharmacy store
+    And I add an item to the cart
+    And I proceed to checkout
+    And I select a payment method
+    Then I should be able to place the order successfully
+
+  Scenario: Facebook Logout and Login Again
+    Given I am logged in to Talabat with Facebook
+    When I navigate to the Account tab
+    And I click on the settings icon at the right top
+    And I click on the ‘Log out’
+    And I click on the 'Log out' button on popup
+    Then I should be logged out
+    When I tap on the "Login with Facebook" button
+    And I enter valid Facebook credentials
+    Then I should be logged in to Talabat
+
+  Scenario: Facebook login with changed email
+    Given I have a Facebook account
+    When I change my email address on Facebook
+    And I launch the Talabat app
+    And I tap on the "Login with Facebook" button
+    And I enter valid Facebook credentials
+    Then I should be logged in to Talabat
+    And My Talabat account email should be updated with the new Facebook email
