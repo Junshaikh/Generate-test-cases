@@ -1,0 +1,126 @@
+@P0 @snoke @login
+
+Feature: Google Login and Talabat Functionality
+
+Background:
+  Given This is for Talabat food delivery application
+  And Talabat food mobile application
+  And User is a pro user
+
+  Scenario: Successful Google Login and Food Order Placement
+    Given User opens the Talabat app
+    When User taps on the "Login with Google" button
+    And User selects their Google account
+    Then User should be logged in successfully
+    And User sees the Home Screen
+    When User taps on the "Food" vertical entry point
+    Then User should be navigated to the food vendor list screen
+    When User searches for "Pizza"
+    And User selects a pizza vendor
+    Then User should be navigated to the food menu screen for the selected vendor
+    When User adds a "Margherita Pizza" to the cart
+    And User taps on the "View cart" button
+    Then User should be navigated to the Cart screen
+    When User taps on "Proceed to checkout"
+    Then User should be navigated to the Checkout screen
+    And User selects a payment method
+    And User places the order
+    Then User should see an order confirmation message
+
+  Scenario: Successful Google Login and Talabat Mart Order Placement
+    Given User opens the Talabat app
+    When User taps on the "Login with Google" button
+    And User selects their Google account
+    Then User should be logged in successfully
+    And User sees the Home Screen
+    When User taps on the "talabat mart" vertical entry point
+    Then User should be navigated to the talabat mart vendor list screen
+    When User searches for "Milk"
+    And User selects a talabat mart vendor
+    Then User should be navigated to the talabat mart item list screen for the selected vendor
+    When User adds "1 liter Milk" to the cart
+    And User taps on the "View cart" button
+    Then User should be navigated to the Cart screen
+    When User taps on "Proceed to checkout"
+    Then User should be navigated to the Checkout screen
+    And User selects a payment method
+    And User places the order
+    Then User should see an order confirmation message
+
+  Scenario: Successful Google Login and Groceries Order Placement
+    Given User opens the Talabat app
+    When User taps on the "Login with Google" button
+    And User selects their Google account
+    Then User should be logged in successfully
+    And User sees the Home Screen
+    When User taps on the "Groceries" vertical entry point
+    Then User should be navigated to the groceries vendor list screen
+    When User searches for "Apples"
+    And User selects a grocery vendor
+    Then User should be navigated to the grocery item list screen for the selected vendor
+    When User adds "1 kg Apples" to the cart
+    And User taps on the "View cart" button
+    Then User should be navigated to the Cart screen
+    When User taps on "Proceed to checkout"
+    Then User should be navigated to the Checkout screen
+    And User selects a payment method
+    And User places the order
+    Then User should see an order confirmation message
+
+  Scenario: Successful Google Login and Pharmacies Order Placement
+    Given User opens the Talabat app
+    When User taps on the "Login with Google" button
+    And User selects their Google account
+    Then User should be logged in successfully
+    And User sees the Home Screen
+    When User taps on the "Pharmacies" vertical entry point
+    Then User should be navigated to the pharmacies vendor list screen
+    When User searches for "Band-aids"
+    And User selects a pharmacy vendor
+    Then User should be navigated to the pharmacy item list screen for the selected vendor
+    When User adds "Band-aids" to the cart
+    And User taps on the "View cart" button
+    Then User should be navigated to the Cart screen
+    When User taps on "Proceed to checkout"
+    Then User should be navigated to the Checkout screen
+    And User selects a payment method
+    And User places the order
+    Then User should see an order confirmation message
+
+  Scenario: Successful Google Login and Stores Order Placement
+    Given User opens the Talabat app
+    When User taps on the "Login with Google" button
+    And User selects their Google account
+    Then User should be logged in successfully
+    And User sees the Home Screen
+    When User taps on the "Stores" vertical entry point
+    Then User should be navigated to the stores vendor list screen
+    When User searches for "Flowers"
+    And User selects a store vendor
+    Then User should be navigated to the store item list screen for the selected vendor
+    When User adds "Roses" to the cart
+    And User taps on the "View cart" button
+    Then User should be navigated to the Cart screen
+    When User taps on "Proceed to checkout"
+    Then User should be navigated to the Checkout screen
+    And User selects a payment method
+    And User places the order
+    Then User should see an order confirmation message
+
+  Scenario: Successful Google Login and Dineout Pay bill flow
+    Given User opens the Talabat app
+    When User taps on the "Login with Google" button
+    And User selects their Google account
+    Then User should be logged in successfully
+    And User sees the Home Screen
+    When User taps on the "Dineout" vertical entry point
+    Then User should be navigated to the dineout restaurants list screen
+    When User selects a restaurant
+    Then User should be navigated to the dineout restaurant details screen
+    When User clicks on "Pay Bill" option
+    Then User inputs the bill amount
+    And User clicks on "Unlock discount"
+    And User navigates to the checkout page
+    And User selects a payment method with new card
+    And User places the order
+    Then User should see an order confirmation message
